@@ -1,0 +1,160 @@
+{
+  "Nav": {
+    "home": "Fuula Jalqabaa",
+    "about": "Seenaa Keenya",
+    "structure": "Bulchiinsaa fi Caasaa",
+    "leaders": "Hoggantoota Keenya",
+    "work": "Waan Nu Hojjennu",
+    "partners": "Michoota",
+    "membership": "ACLIC Waliin Ta'aa",
+    "resources": "Gabaasaa fi Qabeenya",
+    "contact": "Nu Quunnamaa",
+    "skipToContent": "Gara Qabiyyeetti Utaali"
+  },
+  "Common": {
+    "readMore": "Dabalata Dubbisi",
+    "close": "Cufi",
+    "menu": "Menu",
+    "language": "Afaan",
+    "theme": "Bifa",
+    "lightMode": "Bifa Ifaa",
+    "darkMode": "Bifa Dukkanaa",
+    "availableInEnglish": "Afaan Ingiliffaan ni argama",
+    "loading": "Fe'aa jira…"
+  },
+  "Home": {
+    "eyebrow": "ACLIC — Waldaa Ijoolleen Hoogganamtu",
+    "heroThesis": "Teessoon gamtaa kanaa hundinuu nama umuriin isaa waggaa 18 gadi ta'een qabama.",
+    "heroSub": "ACLIC gamtaa caasaalee ijoolleen hoogganamanii ti — sagantaa ijoolleef qophaa'e utuu hin taane, caasaa isaan mataan isaanii hoogganan.",
+    "aboutSnippetHeading": "ACLIC Maali",
+    "structureCta": "Caasaa Guutuu Ilaali",
+    "missionHeading": "Ergama",
+    "visionHeading": "Mul'ata",
+    "missionEmpty": "Ibsi ergamaa erga gamtichaan mirkanaa'ee booda asitti ni maxxanfama.",
+    "visionEmpty": "Ibsi mul'ataa erga gamtichaan mirkanaa'ee booda asitti ni maxxanfama.",
+    "impactHeading": "Iddoowwan Hojiin Itti Raawwatamu",
+    "partnersHeading": "Warra Waliin Hojjennu",
+    "partnersCta": "Michoota Hunda Ilaali",
+    "newsletterHeading": "Odeeffannoo Argadhu",
+    "newsletterSub": "Odeeffannoo waa'ee falmii, ololaa fi hojii ACLIC — yeroo yerootti, afaan ati filattetti erga'ama."
+  },
+  "About": {
+    "eyebrow": "Seenaa Keenya",
+    "heading": "ACLIC Akkamitti Hundeeffame",
+    "foundingHeading": "Hundeeffama",
+    "growthHeading": "Guddina Ergasii",
+    "unHeading": "Yaadawwan Dhaabbata Mootummoota Gamtoomaniif Dhihaatan",
+    "foundingBody": "ACLIC Hagayya 2025 ijoollee fi Dhaabbata Guddina Hawaasummaa (OSD) waliin hundeeffame; caasaalee miseensaa 50 ol ta'anii fi qaamolee raawwachiiftuu isaa duraan dursanii hundaa'aniin eegale.",
+    "growthBody": "Gamtichi ergasii caasaalee miseensaa dabalataa dabaluu itti fufeera; paarlaamaa ijoollee fi dhaabbilee michoomaa waliinis hojjeta.",
+    "unBody": "ACLIC utuu caasaa guutummaatti bocamee fi mootummaan hin galmeessin dura Dhaabbata Mootummoota Gamtoomaniif yaadawwan dhiyeesseera.",
+    "missionHeading": "Ergama",
+    "visionHeading": "Mul'ata"
+  },
+  "Structure": {
+    "eyebrow": "Bulchiinsa",
+    "heading": "Bulchiinsaa fi Caasaa",
+    "diagramCaption": "Sarara bulchiinsaa guutuu, Waldaa Waliigalaa irraa hanga kutaalee hundaatti.",
+    "assemblyHeading": "Waldaa Waliigalaa",
+    "assemblyBody": "Waldaan Waliigalaa dhaabbata olaanaa gamtichaa ti, kan caasaalee miseensaa irraa hundaa'e.",
+    "leadershipHeading": "Hooggansa Olaanaa",
+    "leadershipBody": "Pirezidaantii tokko, Itti Aantota Pirezidaantii lama, fi Barreessaa tokko; isaan gararraa Hoogganoota Kutaa 13 kutaalee hojii gamtichaa hoogganan.",
+    "departmentsHeading": "Kutaalee",
+    "ageNote": "Namni teessoo kamiyyuu caasaa kana keessatti qabu hundinuu umuriin isaa waggaa 18 gadi; teessoon hundinuus caasaalee miseensaan filatama.",
+    "hostHeading": "Dhaabbata Keessummeessu",
+    "hostBody": "Dhaabbanni Guddina Hawaasummaa (OSD) dhaabbata ACLIC keessummeessuu fi teessoo galmee isaa ti.",
+    "bylawsHeading": "Seera Keessoo",
+    "bylawsNote": "Cuunfaan seera keessoo yeroo gamtichaan maxxanfamu asitti ni argama."
+  },
+  "Leaders": {
+    "eyebrow": "Hoggantoota Keenya",
+    "heading": "Hoggantoota Keenya Beeki",
+    "sub": "Caasaalee miseensaan filataman. Teessoon asii hundinuu nama umuriin isaa waggaa 18 gadi ta'een qabama.",
+    "president": "Pirezidaantii",
+    "vicePresident": "Itti Aantuu Pirezidaantii",
+    "secretary": "Barreessaa",
+    "departmentHead": "Hoogganaa Kutaa",
+    "bioHeading": "Seenaa Dhuunfaa",
+    "photoPending": "Suuraa eeggachaa jira",
+    "profilePending": "Piroofaayilli kun ammaaf hin maxxanfamne."
+  },
+  "Work": {
+    "eyebrow": "Waan Nu Hojjennu",
+    "heading": "Waan Nu Hojjennu",
+    "categories": {
+      "training": "Leenjiiwwan",
+      "campaign": "Ololawwan",
+      "assembly": "Walgahii Waldaa Waliigalaa",
+      "advocacy": "Dhiyeessii Falmii",
+      "partnership": "Michoomaa"
+    },
+    "emptyState": "Odeeffannoon kutaa kanaa yeroo ifatti baafamuuf hayyamamu maxxanfama."
+  },
+  "Partners": {
+    "eyebrow": "Michoota",
+    "heading": "Michoota",
+    "parentHeading": "Dhaabbata Keessummeessuu fi Warra Hundeessan",
+    "otherHeading": "Michoota Gamtichaa",
+    "placeholderLabel": "Michuu"
+  },
+  "Membership": {
+    "eyebrow": "ACLIC Waliin Ta'aa",
+    "heading": "ACLIC Waliin Ta'aa",
+    "whoHeading": "Eenyutu Dabalachuu Danda'a",
+    "whoBody": "Miseensummaan kan qabamu caasaalee ijoolleen hoogganamaniin malee, namoota dhuunfaatiin miti. Caasaan tokko gamtaa dabalata; dargaggoonni caasaa keessa jiran hanga waggaa 18 guutanitti hirmaatu.",
+    "involvesHeading": "Miseensummaan Maal Of Keessaa Qaba",
+    "involvesBody": "Caasaaleen miseensaa Waldaa Waliigalaa keessatti hirmaatu, hojii kutaaleetiif gumaacha godhu, akkasumas filannoo hooggansa gamtichaatiif hirmaatu.",
+    "applyCta": "Miseensummaaf Galmaa'i",
+    "applyNote": "Iyyanni kun foddaa haaraa keessatti banama."
+  },
+  "Resources": {
+    "eyebrow": "Gabaasaa fi Qabeenya",
+    "heading": "Gabaasaa fi Qabeenya",
+    "emptyState": "Ammaaf asitti wanti maxxanfame hin jiru. Gabaasaawwanii fi qabeenyi yeroo ifatti baafamuuf hayyamamanitti deebi'aa ilaalaa."
+  },
+  "Contact": {
+    "eyebrow": "Nu Quunnamaa",
+    "heading": "Nu Quunnamaa",
+    "emailHeading": "Imeelii",
+    "phoneHeading": "Bilbila",
+    "addressHeading": "Teessoo",
+    "socialHeading": "ACLIC Hordofaa"
+  },
+  "Privacy": {
+    "eyebrow": "Iccitii",
+    "heading": "Iccitii fi Deetaa"
+  },
+  "Safeguarding": {
+    "eyebrow": "Eegumsa",
+    "heading": "Ibsa Eegumsa Ijoollee"
+  },
+  "Newsletter": {
+    "emailLabel": "Teessoo Imeelii",
+    "languageLabel": "Afaan Filattan",
+    "consentLabel": "ACLIC irraa yeroo yerootti odeeffannoo imeelii argachuuf walii galeera; yeroo barbaadetti dhaabuu akkan danda'u hubadheera.",
+    "submit": "Odeeffannoo Argadhu",
+    "success": "Miseensummaa kee mirkaneessuuf saanduqa imeelii kee ilaali.",
+    "error": "Rakkoon tokko uumameera. Maaloo irra deebi'ii yaali.",
+    "alreadySubscribed": "Teessoon kun duraan tarree irra jira."
+  },
+  "Unsubscribe": {
+    "heading": "Miseensummaan Kee Dhaabbateera",
+    "body": "Kana booda ACLIC irraa odeeffannoo imeelii hin argattu.",
+    "error": "Liinkiin dhaabuu kun sirrii miti."
+  },
+  "Footer": {
+    "tagline": "Gamtaa caasaalee ijoolleen hoogganamanii, Finfinnee, Itoophiyaa keessatti argamu.",
+    "quickLinks": "Liinkota Ariifachiisoo",
+    "legal": "Seeraa",
+    "rights": "Mirgi hundi seeraan eegameera."
+  },
+  "NotFound": {
+    "heading": "Fuulli kun hin jiru",
+    "body": "Fuulli ati barbaaddu sochoofameera, ykn takkaa as hin turre. Teessoon gamtaa kanaa kan biraa hundinuu ammallee iddoo isaatti argama.",
+    "cta": "Gara Fuula Jalqabaatti Deebi'i"
+  },
+  "ServerError": {
+    "heading": "Karaa keenyaan rakkoon uumameera",
+    "body": "Maaloo yeroo xiqqoo booda irra deebi'ii yaali. Kun yoo itti fufe, fuula nu quunnamaa keessaan nu beeksisi.",
+    "cta": "Gara Fuula Jalqabaatti Deebi'i"
+  }
+}

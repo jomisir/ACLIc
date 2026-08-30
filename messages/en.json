@@ -1,0 +1,160 @@
+{
+  "Nav": {
+    "home": "Home",
+    "about": "Our story",
+    "structure": "Governance & structure",
+    "leaders": "Our leaders",
+    "work": "What we do",
+    "partners": "Partners",
+    "membership": "Join ACLIC",
+    "resources": "Reports & resources",
+    "contact": "Contact",
+    "skipToContent": "Skip to content"
+  },
+  "Common": {
+    "readMore": "Read more",
+    "close": "Close",
+    "menu": "Menu",
+    "language": "Language",
+    "theme": "Theme",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "availableInEnglish": "Available in English",
+    "loading": "Loading…"
+  },
+  "Home": {
+    "eyebrow": "Addis Child-Led Initiatives Coalition",
+    "heroThesis": "Every seat in this coalition is held by someone under eighteen.",
+    "heroSub": "ACLIC is a coalition of child-led structures — not a program for children, a structure run by them.",
+    "aboutSnippetHeading": "What ACLIC is",
+    "structureCta": "See the full structure",
+    "missionHeading": "Mission",
+    "visionHeading": "Vision",
+    "missionEmpty": "The mission statement will be published here once confirmed by the coalition.",
+    "visionEmpty": "The vision statement will be published here once confirmed by the coalition.",
+    "impactHeading": "Where the work happens",
+    "partnersHeading": "Working alongside",
+    "partnersCta": "See all partners",
+    "newsletterHeading": "Get updates",
+    "newsletterSub": "Updates on ACLIC's advocacy, campaigns, and work — sent occasionally, in the language you choose."
+  },
+  "About": {
+    "eyebrow": "Our story",
+    "heading": "How ACLIC came to be",
+    "foundingHeading": "Founding",
+    "growthHeading": "Growth since",
+    "unHeading": "Recommendations submitted to the United Nations",
+    "foundingBody": "ACLIC was initiated in August 2025 by children together with the Organization for Social Development (OSD). It launched with more than 50 member structures and its executive organs already formed.",
+    "growthBody": "The coalition has continued to add member structures since, and works alongside the child parliament and partner organizations.",
+    "unBody": "ACLIC submitted recommendations to the United Nations — before the coalition was even a fully defined and government-registered structure.",
+    "missionHeading": "Mission",
+    "visionHeading": "Vision"
+  },
+  "Structure": {
+    "eyebrow": "Governance",
+    "heading": "Governance & structure",
+    "diagramCaption": "The full governance chain, from the General Assembly down to each department.",
+    "assemblyHeading": "The General Assembly",
+    "assemblyBody": "The General Assembly is the coalition's supreme organ, made up of its member structures.",
+    "leadershipHeading": "Senior leadership",
+    "leadershipBody": "One President, two Vice Presidents, and a Secretary, above thirteen department heads leading the coalition's functional units.",
+    "departmentsHeading": "Departments",
+    "ageNote": "Every officeholder in this structure is under eighteen, and every seat is filled through election by member structures.",
+    "hostHeading": "Host organization",
+    "hostBody": "The Organization for Social Development (OSD) is ACLIC's host organization and registered address.",
+    "bylawsHeading": "Bylaws",
+    "bylawsNote": "A public summary of the bylaws will be made available here when the coalition publishes one."
+  },
+  "Leaders": {
+    "eyebrow": "Our leaders",
+    "heading": "Check out our leaders",
+    "sub": "Elected by member structures. Every role here is held by someone under eighteen.",
+    "president": "President",
+    "vicePresident": "Vice President",
+    "secretary": "Secretary",
+    "departmentHead": "Department Head",
+    "bioHeading": "Biography",
+    "photoPending": "Photo pending",
+    "profilePending": "This profile is not yet published."
+  },
+  "Work": {
+    "eyebrow": "What we do",
+    "heading": "What we do",
+    "categories": {
+      "training": "Trainings",
+      "campaign": "Campaigns",
+      "assembly": "General Assembly sessions",
+      "advocacy": "Advocacy submissions",
+      "partnership": "Partnerships"
+    },
+    "emptyState": "Updates from this area are published as they are cleared for release."
+  },
+  "Partners": {
+    "eyebrow": "Partners",
+    "heading": "Partners",
+    "parentHeading": "Host and parent organizations",
+    "otherHeading": "Coalition partners",
+    "placeholderLabel": "Partner"
+  },
+  "Membership": {
+    "eyebrow": "Join ACLIC",
+    "heading": "Join ACLIC",
+    "whoHeading": "Who can join",
+    "whoBody": "Membership is held by child-led structures, not by individuals. A structure joins the coalition; the young people within it take part until they turn eighteen.",
+    "involvesHeading": "What membership involves",
+    "involvesBody": "Member structures take part in the General Assembly, contribute to department work, and take part in elections for coalition leadership.",
+    "applyCta": "Apply for membership",
+    "applyNote": "The application opens in a new tab."
+  },
+  "Resources": {
+    "eyebrow": "Reports & resources",
+    "heading": "Reports & resources",
+    "emptyState": "Nothing has been published here yet. Check back as reports and resources are cleared for release."
+  },
+  "Contact": {
+    "eyebrow": "Contact",
+    "heading": "Contact",
+    "emailHeading": "Email",
+    "phoneHeading": "Phone",
+    "addressHeading": "Address",
+    "socialHeading": "Follow ACLIC"
+  },
+  "Privacy": {
+    "eyebrow": "Privacy",
+    "heading": "Privacy & data"
+  },
+  "Safeguarding": {
+    "eyebrow": "Safeguarding",
+    "heading": "Child safeguarding statement"
+  },
+  "Newsletter": {
+    "emailLabel": "Email address",
+    "languageLabel": "Preferred language",
+    "consentLabel": "I agree to receive occasional email updates from ACLIC and understand I can unsubscribe at any time.",
+    "submit": "Get updates",
+    "success": "Check your inbox to confirm your subscription.",
+    "error": "Something went wrong. Please try again.",
+    "alreadySubscribed": "That address is already on the list."
+  },
+  "Unsubscribe": {
+    "heading": "You have been unsubscribed",
+    "body": "You will no longer receive email updates from ACLIC.",
+    "error": "This unsubscribe link is not valid."
+  },
+  "Footer": {
+    "tagline": "A coalition of child-led structures based in Addis Ababa, Ethiopia.",
+    "quickLinks": "Quick links",
+    "legal": "Legal",
+    "rights": "All rights reserved."
+  },
+  "NotFound": {
+    "heading": "This page doesn't exist",
+    "body": "The page you're looking for has moved, or was never here. Every other seat in this coalition is still exactly where it should be.",
+    "cta": "Back to home"
+  },
+  "ServerError": {
+    "heading": "Something went wrong on our end",
+    "body": "Try again in a moment. If this keeps happening, let us know through the contact page.",
+    "cta": "Back to home"
+  }
+}

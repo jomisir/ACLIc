@@ -1,0 +1,160 @@
+{
+  "Nav": {
+    "home": "መነሻ",
+    "about": "የእኛ ታሪክ",
+    "structure": "አስተዳደር እና መዋቅር",
+    "leaders": "መሪዎቻችን",
+    "work": "የምንሰራው ስራ",
+    "partners": "አጋሮች",
+    "membership": "ACLIC ይቀላቀሉ",
+    "resources": "ሪፖርቶች እና ግብዓቶች",
+    "contact": "ያግኙን",
+    "skipToContent": "ወደ ይዘት ዝለል"
+  },
+  "Common": {
+    "readMore": "ተጨማሪ ያንብቡ",
+    "close": "ዝጋ",
+    "menu": "ምናሌ",
+    "language": "ቋንቋ",
+    "theme": "ገጽታ",
+    "lightMode": "ብሩህ ገጽታ",
+    "darkMode": "ጨለማ ገጽታ",
+    "availableInEnglish": "በእንግሊዝኛ ይገኛል",
+    "loading": "በመጫን ላይ…"
+  },
+  "Home": {
+    "eyebrow": "ACLIC — በህጻናት የሚመራ ኀብረት",
+    "heroThesis": "በዚህ ኀብረት ውስጥ ያለ እያንዳንዱ ወንበር ዕድሜው ከ18 ዓመት በታች በሆነ ሰው ተይዟል።",
+    "heroSub": "ACLIC በህጻናት የሚመራ የመዋቅሮች ኀብረት ነው — ለህጻናት የተዘጋጀ ፕሮግራም ሳይሆን በራሳቸው የሚመራ መዋቅር ነው።",
+    "aboutSnippetHeading": "ACLIC ምንድን ነው",
+    "structureCta": "ሙሉ መዋቅሩን ይመልከቱ",
+    "missionHeading": "ተልእኮ",
+    "visionHeading": "ራዕይ",
+    "missionEmpty": "የተልእኮ መግለጫው በኀብረቱ ከተረጋገጠ በኋላ እዚህ ይታተማል።",
+    "visionEmpty": "የራዕይ መግለጫው በኀብረቱ ከተረጋገጠ በኋላ እዚህ ይታተማል።",
+    "impactHeading": "ስራው የሚከናወንባቸው ዘርፎች",
+    "partnersHeading": "አብረው የሚሰሩ አካላት",
+    "partnersCta": "ሁሉንም አጋሮች ይመልከቱ",
+    "newsletterHeading": "መረጃ ይቀበሉ",
+    "newsletterSub": "ስለ ACLIC ተሟጋችነት፣ ዘመቻዎች እና ስራ የሆኑ መረጃዎች — አልፎ አልፎ፣ በመረጡት ቋንቋ ይላካሉ።"
+  },
+  "About": {
+    "eyebrow": "የእኛ ታሪክ",
+    "heading": "ACLIC እንዴት ተመሰረተ",
+    "foundingHeading": "መመስረት",
+    "growthHeading": "ከዚያ ወዲህ ያለው እድገት",
+    "unHeading": "ለተባበሩት መንግስታት የቀረቡ ምክረ ሃሳቦች",
+    "foundingBody": "ACLIC በእ.ኤ.አ. ነሐሴ 2025 በህጻናት ከማህበራዊ ልማት ድርጅት (OSD) ጋር ተመሠረተ፤ ከ50 በላይ አባል መዋቅሮች እና አስቀድሞ የተቋቋሙ የስራ አስፈጻሚ አካላት ይዞ ተጀመረ።",
+    "growthBody": "ኀብረቱ ከዚያ ወዲህ ተጨማሪ አባል መዋቅሮችን ማከል ቀጥሏል፣ ከህጻናት ፓርላማ እና ከአጋር ድርጅቶች ጋርም አብሮ ይሰራል።",
+    "unBody": "ACLIC ሙሉ በሙሉ የተዋቀረ እና በመንግስት ያልተመዘገበ መዋቅር ከመሆኑ በፊት እንኳ ለተባበሩት መንግስታት ድርጅት ምክረ ሃሳቦችን አቅርቧል።",
+    "missionHeading": "ተልእኮ",
+    "visionHeading": "ራዕይ"
+  },
+  "Structure": {
+    "eyebrow": "አስተዳደር",
+    "heading": "አስተዳደር እና መዋቅር",
+    "diagramCaption": "ከጠቅላላ ጉባኤ እስከ እያንዳንዱ ዘርፍ ያለው ሙሉ የአስተዳደር ሰንሰለት።",
+    "assemblyHeading": "ጠቅላላ ጉባኤ",
+    "assemblyBody": "ጠቅላላ ጉባኤው የኀብረቱ የበላይ አካል ሲሆን፣ ከአባል መዋቅሮች የተዋቀረ ነው።",
+    "leadershipHeading": "ከፍተኛ አመራር",
+    "leadershipBody": "አንድ ፕሬዝዳንት፣ ሁለት ምክትል ፕሬዝዳንቶች፣ እና አንድ ፀሐፊ፤ ከነሱ በላይ የኀብረቱን የስራ ዘርፎች የሚመሩ 13 የዘርፍ ኃላፊዎች።",
+    "departmentsHeading": "ዘርፎች",
+    "ageNote": "በዚህ መዋቅር ውስጥ ያለ እያንዳንዱ የኃላፊነት ቦታ ያዥ ዕድሜው ከ18 ዓመት በታች ነው፣ እያንዳንዱ ቦታም በአባል መዋቅሮች ምርጫ የተያዘ ነው።",
+    "hostHeading": "አስተናጋጅ ድርጅት",
+    "hostBody": "የማህበራዊ ልማት ድርጅት (OSD) የACLIC አስተናጋጅ ድርጅት እና የተመዘገበበት አድራሻ ነው።",
+    "bylawsHeading": "የመተዳደሪያ ደንብ",
+    "bylawsNote": "ኮሊሽኑ ሲያትመው የመተዳደሪያ ደንቡ ማጠቃለያ እዚህ ይገኛል።"
+  },
+  "Leaders": {
+    "eyebrow": "መሪዎቻችን",
+    "heading": "መሪዎቻችንን ይተዋወቁ",
+    "sub": "በአባል መዋቅሮች የተመረጡ። እዚህ ያለ እያንዳንዱ ቦታ ዕድሜው ከ18 ዓመት በታች በሆነ ሰው ተይዟል።",
+    "president": "ፕሬዝዳንት",
+    "vicePresident": "ምክትል ፕሬዝዳንት",
+    "secretary": "ፀሐፊ",
+    "departmentHead": "የዘርፍ ኃላፊ",
+    "bioHeading": "የህይወት ታሪክ",
+    "photoPending": "ፎቶ በመጠባበቅ ላይ",
+    "profilePending": "ይህ መገለጫ እስካሁን አልታተመም።"
+  },
+  "Work": {
+    "eyebrow": "የምንሰራው ስራ",
+    "heading": "የምንሰራው ስራ",
+    "categories": {
+      "training": "ስልጠናዎች",
+      "campaign": "ዘመቻዎች",
+      "assembly": "የጠቅላላ ጉባኤ ስብሰባዎች",
+      "advocacy": "የተሟጋችነት ማቅረቢያዎች",
+      "partnership": "የአጋርነት ስራዎች"
+    },
+    "emptyState": "ከዚህ ዘርፍ የሚወጡ መረጃዎች ለሕዝብ ይፋ እንዲሆኑ ከተፈቀደ በኋላ ይታተማሉ።"
+  },
+  "Partners": {
+    "eyebrow": "አጋሮች",
+    "heading": "አጋሮች",
+    "parentHeading": "አስተናጋጅ እና ወላጅ ድርጅቶች",
+    "otherHeading": "የኀብረቱ አጋሮች",
+    "placeholderLabel": "አጋር"
+  },
+  "Membership": {
+    "eyebrow": "ACLIC ይቀላቀሉ",
+    "heading": "ACLIC ይቀላቀሉ",
+    "whoHeading": "ማን መቀላቀል ይችላል",
+    "whoBody": "አባልነት የሚያዘው በህጻናት በሚመሩ መዋቅሮች እንጂ በግለሰቦች አይደለም። አንድ መዋቅር ኀብረቱን ይቀላቀላል፤ በውስጡ ያሉ ወጣቶች 18 ዓመት እስኪሞላቸው ድረስ ይሳተፋሉ።",
+    "involvesHeading": "አባልነት ምን ያካትታል",
+    "involvesBody": "የአባል መዋቅሮች በጠቅላላ ጉባኤው ይሳተፋሉ፣ በዘርፍ ስራዎች አስተዋፅኦ ያደርጋሉ፣ እንዲሁም ለኀብረቱ አመራር በሚደረጉ ምርጫዎች ይሳተፋሉ።",
+    "applyCta": "ለአባልነት ያመልክቱ",
+    "applyNote": "ማመልከቻው በአዲስ ትር ውስጥ ይከፈታል።"
+  },
+  "Resources": {
+    "eyebrow": "ሪፖርቶች እና ግብዓቶች",
+    "heading": "ሪፖርቶች እና ግብዓቶች",
+    "emptyState": "እስካሁን እዚህ ምንም አልታተመም። ሪፖርቶች እና ግብዓቶች ይፋ እንዲሆኑ ሲፈቀድ ተመልሰው ይመልከቱ።"
+  },
+  "Contact": {
+    "eyebrow": "ያግኙን",
+    "heading": "ያግኙን",
+    "emailHeading": "ኢሜይል",
+    "phoneHeading": "ስልክ",
+    "addressHeading": "አድራሻ",
+    "socialHeading": "ACLIC ን ይከታተሉ"
+  },
+  "Privacy": {
+    "eyebrow": "ግላዊነት",
+    "heading": "ግላዊነት እና መረጃ"
+  },
+  "Safeguarding": {
+    "eyebrow": "ጥበቃ",
+    "heading": "የህጻናት ጥበቃ መግለጫ"
+  },
+  "Newsletter": {
+    "emailLabel": "የኢሜይል አድራሻ",
+    "languageLabel": "የሚመርጡት ቋንቋ",
+    "consentLabel": "ከACLIC አልፎ አልፎ የኢሜይል መረጃ ለመቀበል እስማማለሁ፣ በማንኛውም ጊዜ ማቋረጥ እንደምችልም ተረድቻለሁ።",
+    "submit": "መረጃ ይቀበሉ",
+    "success": "ደንበኝነትዎን ለማረጋገጥ ኢሜይልዎን ይመልከቱ።",
+    "error": "የሆነ ችግር ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።",
+    "alreadySubscribed": "ይህ አድራሻ አስቀድሞ በዝርዝሩ ውስጥ ይገኛል።"
+  },
+  "Unsubscribe": {
+    "heading": "ደንበኝነትዎ ተቋርጧል",
+    "body": "ከዚህ በኋላ ከACLIC የኢሜይል መረጃ አይደርስዎትም።",
+    "error": "ይህ የማቋረጫ ማገናኛ ልክ አይደለም።"
+  },
+  "Footer": {
+    "tagline": "በአዲስ አበባ፣ ኢትዮጵያ የሚገኝ በህጻናት የሚመራ የመዋቅሮች ኀብረት።",
+    "quickLinks": "ፈጣን ማገናኛዎች",
+    "legal": "ህጋዊ",
+    "rights": "መብቱ በህግ የተጠበቀ ነው።"
+  },
+  "NotFound": {
+    "heading": "ይህ ገጽ የለም",
+    "body": "የፈለጉት ገጽ ተንቀሳቅሷል፣ ወይም ጭራሽ አልነበረም። በዚህ ኀብረት ውስጥ ያለ ሌላው እያንዳንዱ ወንበር ግን አሁንም ባለበት ነው።",
+    "cta": "ወደ መነሻ ገጽ ተመለስ"
+  },
+  "ServerError": {
+    "heading": "በኛ በኩል ችግር ተፈጥሯል",
+    "body": "እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ። ይህ ከቀጠለ በያግኙን ገጽ በኩል ያሳውቁን።",
+    "cta": "ወደ መነሻ ገጽ ተመለስ"
+  }
+}

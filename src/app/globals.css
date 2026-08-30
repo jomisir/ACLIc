@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+/* --- Color tokens (§5) --------------------------------------------- */
+[data-theme="light"] {
+  --ink: #0e0e10;
+  --surface: #f7f5f0;
+  --surface-raised: #ffffff;
+  --gold: #c8a24a;
+  --gold-deep: #8a6b22;
+  --muted: #5a5e67;
+  --green: #2e6b52;
+}
+
+[data-theme="dark"] {
+  --ink: #f2f0ea;
+  --surface: #0e0e10;
+  --surface-raised: #17171a;
+  --gold: #d8b45c;
+  --gold-deep: #a88433;
+  --muted: #9a9ea7;
+  --green: #3e8a6a;
+}
+
+/* Fallback before the inline theme-init script runs, and for
+   environments that honor only the OS preference. */
+:root {
+  color-scheme: light dark;
+  --ink: #0e0e10;
+  --surface: #f7f5f0;
+  --surface-raised: #ffffff;
+  --gold: #c8a24a;
+  --gold-deep: #8a6b22;
+  --muted: #5a5e67;
+  --green: #2e6b52;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #f2f0ea;
+    --surface: #0e0e10;
+    --surface-raised: #17171a;
+    --gold: #d8b45c;
+    --gold-deep: #a88433;
+    --muted: #9a9ea7;
+    --green: #3e8a6a;
+  }
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-muted: var(--muted);
+  --color-green: var(--green);
+
+  --font-display: var(--font-display-latin), var(--font-display-ethiopic), serif;
+  --font-body: var(--font-body-latin), var(--font-body-ethiopic), sans-serif;
+
+  --text-2xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 4rem;
+
+  --radius-max: 4px;
+}
+
+html {
+  background: var(--surface);
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.65;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  font-size: var(--text-2xs);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.measure {
+  max-width: 68ch;
+}
+
+.hairline {
+  border-color: var(--gold);
+}
+
+/* Visible keyboard focus, everywhere, gold with an offset. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-max);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  background: var(--surface-raised);
+  color: var(--ink);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  z-index: 100;
+  transition: top 150ms ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Structure diagram: hairlines draw in once, under 700ms. Reduced-motion
+   users get the finished state immediately via the global override below. */
+.diagram-draw .diagram-line {
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  animation: diagram-draw-in 700ms ease forwards;
+}
+
+@keyframes diagram-draw-in {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.diagram-node-interactive {
+  cursor: pointer;
+}
+
+.diagram-node-interactive:focus-visible .diagram-node {
+  stroke: var(--gold);
+  stroke-width: 2;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,90 @@
+# ACLIC website
+
+The public website for the **Addis Child-Led Initiatives Coalition (ACLIC)**. Next.js 15
+(App Router, TypeScript), Tailwind CSS v4, Drizzle ORM over Postgres, Auth.js v5 for the
+admin panel, next-intl for English / Amharic / Afaan Oromoo, and Supabase Storage for
+uploads. Built to run on a plain self-hosted VPS — see `deploy.md`.
+
+## Local setup
+
+```bash
+cp .env.example .env.local   # fill in DATABASE_URL at minimum
+npm install
+npm run db:generate          # generates SQL from src/db/schema.ts (only needed after a schema change)
+npm run db:migrate           # applies migrations
+npm run db:seed              # creates the bootstrap superuser + empty content rows
+npm run dev
+```
+
+Open http://localhost:3000 — it redirects to `/en`. Admin panel: http://localhost:3000/admin/login.
+
+## Environment variables
+
+See `.env.example` for the full list. The important ones:
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Postgres connection string (Supabase-hosted or self-hosted both work) |
+| `AUTH_SECRET` | Session signing secret — generate with `openssl rand -base64 32` |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL, used in metadata, sitemap, and email links |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Used once by `db:seed` to create the first superuser |
+| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_STORAGE_BUCKET` | Private storage bucket for photos, logos, and report files |
+| `SMTP_*` | Outgoing mail for newsletter double opt-in confirmations |
+
+## Creating an admin user
+
+The first superuser comes from `ADMIN_EMAIL` / `ADMIN_PASSWORD` via `npm run db:seed` (it's
+idempotent — safe to leave in `.env.production` and re-run). To create additional accounts
+afterwards, sign in as a superuser and use **Admin → Users** — it generates a one-time
+temporary password that the account must change on first login.
+
+## Adding a UI language string
+
+1. Add the key to `messages/en.json`, and the same key with translations in
+   `messages/am.json` and `messages/om.json`. Keep the same nesting/namespace across all
+   three files — a missing key falls back to English at runtime but should still be filled
+   in when the translation is ready.
+2. Use it in a Server Component with `getTranslations({ locale, namespace })`, or pass the
+   translated string as a prop into a Client Component (client components deliberately don't
+   call `useTranslations` directly in this codebase — see `src/components/Header.tsx` for the
+   pattern — to keep the public-page client bundle small).
+3. Translatable **content** (page bodies, leader bios, work items, partner names, settings)
+   lives in the database with `_en`/`_am`/`_om` columns instead — edit it from `/admin`, not
+   from the message files.
+
+## Running migrations against production
+
+```bash
+# From a machine that can reach the production DATABASE_URL:
+DATABASE_URL=<production-url> npm run db:migrate
+```
+
+`drizzle-kit migrate` applies any SQL files under `drizzle/` that haven't been applied yet,
+tracked in a `__drizzle_migrations` table. Generate new migration files locally with
+`npm run db:generate` after changing `src/db/schema.ts`, commit them, then run `db:migrate`
+against production as part of the deploy (see `deploy.md`).
+
+## Project structure
+
+```
+src/app/[locale]/     Public site (English/Amharic/Afaan Oromoo, locale-prefixed)
+src/app/admin/        Admin panel (Auth.js-gated, noindex)
+src/app/api/          Route handlers: auth, gated media/resource downloads, newsletter confirm
+src/actions/          Server actions (all mutations go through these, with requireRole() checks)
+src/auth/             Auth.js config, RBAC helper, audit logging
+src/db/               Drizzle schema, migrations, seed script
+src/components/       Server components (public site) + admin/ (admin-only UI)
+messages/             next-intl UI strings, one JSON file per locale
+```
+
+## Notes for the organization
+
+- **Mission and vision statements, and the coalition's bylaws, are intentionally empty** in
+  the seed data. Fill them in from `/admin → Settings` once the official wording is confirmed.
+- **No past program, campaign, or report detail was invented** for this build — `/work` and
+  `/resources` are wired up and empty by design, ready for content to be added from `/admin`.
+- **Leader profiles cannot be published without guardian consent**, recorded by a superuser
+  from each leader's edit page. Do this before publishing any of the 17 leader slots.
+- Recommend clearing the wording of `/privacy` and `/safeguarding` with OSD and Save the
+  Children before launch, since both have existing safeguarding policies this site should be
+  consistent with.
