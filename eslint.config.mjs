@@ -19,6 +19,8 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
       "deploy/**",
+      // CommonJS Passenger entry point — require() is correct here.
+      "app.js",
     ],
   },
 ];

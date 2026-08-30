@@ -1,0 +1,64 @@
+name: Build deploy artifact (Yegara/cPanel)
+
+# The shared host must never run `next build` itself (assume it will OOM —
+# no build toolchain, tight memory limits under CloudLinux's LVE). This
+# workflow does the build here, in CI, and produces a ready-to-upload zip
+# containing exactly what the cPanel Node.js app needs: app.js, the
+# standalone server, its traced node_modules, static assets, and public/.
+#
+# Trigger manually from the Actions tab, or push a tag like v1.0.0.
+on:
+  workflow_dispatch: {}
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # glibc x64 — matches CloudLinux, so sharp's
+    # prebuilt binaries resolved here are the right ones for the host.
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+
+      # Pages are statically generated at build time and read published
+      # content straight from the database (mission/vision, leaders,
+      # partners, ...), so the build needs real access to the production
+      # (or a build-snapshot) database. Configure these as repository
+      # secrets under Settings -> Secrets and variables -> Actions.
+      - name: Build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_STORAGE_BUCKET: ${{ secrets.SUPABASE_STORAGE_BUCKET }}
+        run: npm run build
+
+      - name: Assemble deploy artifact
+        run: |
+          set -euo pipefail
+          rm -rf artifact
+          mkdir -p artifact/.next/standalone
+          cp app.js artifact/app.js
+          cp -r .next/standalone/. artifact/.next/standalone/
+          # Next's standalone output expects .next/static and public/ copied
+          # in alongside server.js — this is the same layout documented for
+          # any standalone deploy, just rooted under app.js here so cPanel
+          # has one fixed entry point regardless of how Next names things.
+          cp -r .next/static artifact/.next/standalone/.next/static
+          cp -r public artifact/.next/standalone/public
+          cd artifact && zip -r ../aclic-deploy.zip . && cd ..
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aclic-deploy-${{ github.sha }}
+          path: aclic-deploy.zip
+          retention-days: 30
