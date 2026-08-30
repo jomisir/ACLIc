@@ -1,11 +1,23 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { leaders } from "@/db/schema";
+import { pageMetadata } from "@/lib/metadata";
 import type { Locale } from "@/i18n/routing";
 
 const titleCol = { en: "roleTitleEn", am: "roleTitleAm", om: "roleTitleOm" } as const;
 const bioCol = { en: "bioEn", am: "bioAm", om: "bioOm" } as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Leaders" });
+  return pageMetadata({ locale, path: "/leaders", title: t("heading"), description: t("sub") });
+}
 
 export default async function LeadersPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;

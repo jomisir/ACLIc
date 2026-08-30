@@ -48,22 +48,24 @@
     "growthBody": "Gamtichi ergasii caasaalee miseensaa dabalataa dabaluu itti fufeera; paarlaamaa ijoollee fi dhaabbilee michoomaa waliinis hojjeta.",
     "unBody": "ACLIC utuu caasaa guutummaatti bocamee fi mootummaan hin galmeessin dura Dhaabbata Mootummoota Gamtoomaniif yaadawwan dhiyeesseera.",
     "missionHeading": "Ergama",
-    "visionHeading": "Mul'ata"
+    "visionHeading": "Mul'ata",
+    "metaDescription": "ACLIC Hagayya 2025 akkamitti akka hundeeffamee fi ergasii akkamitti akka guddate, yaadawwan Dhaabbata Mootummoota Gamtoomaniif dhiyeesse dabalatee."
   },
   "Structure": {
     "eyebrow": "Bulchiinsa",
     "heading": "Bulchiinsaa fi Caasaa",
-    "diagramCaption": "Sarara bulchiinsaa guutuu, Waldaa Waliigalaa irraa hanga kutaalee hundaatti.",
-    "assemblyHeading": "Waldaa Waliigalaa",
-    "assemblyBody": "Waldaan Waliigalaa dhaabbata olaanaa gamtichaa ti, kan caasaalee miseensaa irraa hundaa'e.",
+    "diagramCaption": "Sarara bulchiinsaa guutuu, Wal-ga'ii Waliigalaa irraa hanga dameewwan hundaatti.",
+    "assemblyHeading": "Wal-ga'ii Waliigalaa",
+    "assemblyBody": "Wal-ga'iin Waliigalaa dhaabbata olaanaa gamtichaa ti, kan caasaalee miseensaa irraa hundaa'e.",
     "leadershipHeading": "Hooggansa Olaanaa",
-    "leadershipBody": "Pirezidaantii tokko, Itti Aantota Pirezidaantii lama, fi Barreessaa tokko; isaan gararraa Hoogganoota Kutaa 13 kutaalee hojii gamtichaa hoogganan.",
-    "departmentsHeading": "Kutaalee",
+    "leadershipBody": "Pirezidaantii tokko, Itti Aantota Pirezidaantii lama, fi Barreessaa tokko; isaan gararraa Hoogganoota Damee 13 dameewwan hojii gamtichaa hoogganan.",
+    "departmentsHeading": "Dameewwan",
     "ageNote": "Namni teessoo kamiyyuu caasaa kana keessatti qabu hundinuu umuriin isaa waggaa 18 gadi; teessoon hundinuus caasaalee miseensaan filatama.",
     "hostHeading": "Dhaabbata Keessummeessu",
     "hostBody": "Dhaabbanni Guddina Hawaasummaa (OSD) dhaabbata ACLIC keessummeessuu fi teessoo galmee isaa ti.",
     "bylawsHeading": "Seera Keessoo",
-    "bylawsNote": "Cuunfaan seera keessoo yeroo gamtichaan maxxanfamu asitti ni argama."
+    "bylawsNote": "Cuunfaan seera keessoo yeroo gamtichaan maxxanfamu asitti ni argama.",
+    "metaDescription": "Sarara bulchiinsaa ACLIC guutuu, Wal-ga'ii Waliigalaa irraa hanga hoogganoota dameetti — teessoon hundinuu nama umuriin isaa waggaa 18 gadi ta'een qabama."
   },
   "Leaders": {
     "eyebrow": "Hoggantoota Keenya",
@@ -72,7 +74,7 @@
     "president": "Pirezidaantii",
     "vicePresident": "Itti Aantuu Pirezidaantii",
     "secretary": "Barreessaa",
-    "departmentHead": "Hoogganaa Kutaa",
+    "departmentHead": "Hoogganaa Damee",
     "bioHeading": "Seenaa Dhuunfaa",
     "photoPending": "Suuraa eeggachaa jira",
     "profilePending": "Piroofaayilli kun ammaaf hin maxxanfamne."
@@ -83,18 +85,20 @@
     "categories": {
       "training": "Leenjiiwwan",
       "campaign": "Ololawwan",
-      "assembly": "Walgahii Waldaa Waliigalaa",
+      "assembly": "Wal-ga'iiwwan Waliigalaa",
       "advocacy": "Dhiyeessii Falmii",
       "partnership": "Michoomaa"
     },
-    "emptyState": "Odeeffannoon kutaa kanaa yeroo ifatti baafamuuf hayyamamu maxxanfama."
+    "emptyState": "Odeeffannoon kutaa kanaa yeroo ifatti baafamuuf hayyamamu maxxanfama.",
+    "metaDescription": "Leenjiiwwan, ololawwan, walgahii Wal-ga'ii Waliigalaa, dhiyeessii falmii, fi hojii michoomaa — akkaataa gosaatiin ijaaraman."
   },
   "Partners": {
     "eyebrow": "Michoota",
     "heading": "Michoota",
     "parentHeading": "Dhaabbata Keessummeessuu fi Warra Hundeessan",
     "otherHeading": "Michoota Gamtichaa",
-    "placeholderLabel": "Michuu"
+    "placeholderLabel": "Michuu",
+    "metaDescription": "Dhaabbilee ACLIC waliin hojjetu, dhaabbilee isa keessummeessan OSD fi Save the Children irraa jalqabee."
   },
   "Membership": {
     "eyebrow": "ACLIC Waliin Ta'aa",
@@ -102,14 +106,16 @@
     "whoHeading": "Eenyutu Dabalachuu Danda'a",
     "whoBody": "Miseensummaan kan qabamu caasaalee ijoolleen hoogganamaniin malee, namoota dhuunfaatiin miti. Caasaan tokko gamtaa dabalata; dargaggoonni caasaa keessa jiran hanga waggaa 18 guutanitti hirmaatu.",
     "involvesHeading": "Miseensummaan Maal Of Keessaa Qaba",
-    "involvesBody": "Caasaaleen miseensaa Waldaa Waliigalaa keessatti hirmaatu, hojii kutaaleetiif gumaacha godhu, akkasumas filannoo hooggansa gamtichaatiif hirmaatu.",
+    "involvesBody": "Caasaaleen miseensaa Wal-ga'ii Waliigalaa keessatti hirmaatu, hojii dameewwaniif gumaacha godhu, akkasumas filannoo hooggansa gamtichaatiif hirmaatu.",
     "applyCta": "Miseensummaaf Galmaa'i",
-    "applyNote": "Iyyanni kun foddaa haaraa keessatti banama."
+    "applyNote": "Iyyanni kun foddaa haaraa keessatti banama.",
+    "metaDescription": "Caasaaleen ijoolleen hoogganaman akkamitti ACLIC akka dabalatanii fi miseensummaan maal akka of keessaa qabu."
   },
   "Resources": {
     "eyebrow": "Gabaasaa fi Qabeenya",
     "heading": "Gabaasaa fi Qabeenya",
-    "emptyState": "Ammaaf asitti wanti maxxanfame hin jiru. Gabaasaawwanii fi qabeenyi yeroo ifatti baafamuuf hayyamamanitti deebi'aa ilaalaa."
+    "emptyState": "Ammaaf asitti wanti maxxanfame hin jiru. Gabaasaawwanii fi qabeenyi yeroo ifatti baafamuuf hayyamamanitti deebi'aa ilaalaa.",
+    "metaDescription": "Gabaasaawwanii fi qabeenya ACLIC maxxanse."
   },
   "Contact": {
     "eyebrow": "Nu Quunnamaa",
@@ -117,15 +123,18 @@
     "emailHeading": "Imeelii",
     "phoneHeading": "Bilbila",
     "addressHeading": "Teessoo",
-    "socialHeading": "ACLIC Hordofaa"
+    "socialHeading": "ACLIC Hordofaa",
+    "metaDescription": "ACLIC imeeliidhaan, bilbilaan, ykn miidiyaa hawaasaatiin akkamitti quunnamuu akka dandeessu."
   },
   "Privacy": {
     "eyebrow": "Iccitii",
-    "heading": "Iccitii fi Deetaa"
+    "heading": "Iccitii fi Deetaa",
+    "metaDescription": "ACLIC deetaa dhuunfaa marsariitii kanaan walitti qabamu akkamitti akka bulchu."
   },
   "Safeguarding": {
     "eyebrow": "Eegumsa",
-    "heading": "Ibsa Eegumsa Ijoollee"
+    "heading": "Ibsa Eegumsa Ijoollee",
+    "metaDescription": "Ibsa eegumsa ijoollee ACLIC."
   },
   "Newsletter": {
     "emailLabel": "Teessoo Imeelii",

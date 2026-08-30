@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { getPublishedPageBody } from "@/lib/content";
+import { pageMetadata } from "@/lib/metadata";
 import type { Locale } from "@/i18n/routing";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Safeguarding" });
+  return pageMetadata({ locale, path: "/safeguarding", title: t("heading"), description: t("metaDescription") });
+}
 
 export default async function SafeguardingPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;

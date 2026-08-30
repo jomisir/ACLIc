@@ -1,7 +1,19 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { StructureDiagram } from "@/components/StructureDiagram";
 import { ImageSlot } from "@/components/ImageSlot";
+import { pageMetadata } from "@/lib/metadata";
 import type { Locale } from "@/i18n/routing";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Structure" });
+  return pageMetadata({ locale, path: "/structure", title: t("heading"), description: t("metaDescription") });
+}
 
 export default async function StructurePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;

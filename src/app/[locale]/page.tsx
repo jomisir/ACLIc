@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { asc, eq } from "drizzle-orm";
 import { Link } from "@/i18n/navigation";
@@ -5,12 +6,28 @@ import { StructureDiagram } from "@/components/StructureDiagram";
 import { ImageSlot } from "@/components/ImageSlot";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { getMissionVision } from "@/lib/content";
+import { pageMetadata } from "@/lib/metadata";
 import { db } from "@/db";
 import { partners, workItems } from "@/db/schema";
 import { sql } from "drizzle-orm";
 import type { Locale } from "@/i18n/routing";
 
 const IMPACT_CATEGORIES = ["training", "campaign", "assembly", "advocacy"] as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Home" });
+  return pageMetadata({
+    locale,
+    path: "",
+    title: `ACLIC — ${t("eyebrow")}`,
+    description: t("heroSub"),
+  });
+}
 
 function OrganizationJsonLd() {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

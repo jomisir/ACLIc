@@ -48,7 +48,8 @@
     "growthBody": "The coalition has continued to add member structures since, and works alongside the child parliament and partner organizations.",
     "unBody": "ACLIC submitted recommendations to the United Nations — before the coalition was even a fully defined and government-registered structure.",
     "missionHeading": "Mission",
-    "visionHeading": "Vision"
+    "visionHeading": "Vision",
+    "metaDescription": "How ACLIC was founded in August 2025 and has grown since, including its submissions to the United Nations."
   },
   "Structure": {
     "eyebrow": "Governance",
@@ -63,7 +64,8 @@
     "hostHeading": "Host organization",
     "hostBody": "The Organization for Social Development (OSD) is ACLIC's host organization and registered address.",
     "bylawsHeading": "Bylaws",
-    "bylawsNote": "A public summary of the bylaws will be made available here when the coalition publishes one."
+    "bylawsNote": "A public summary of the bylaws will be made available here when the coalition publishes one.",
+    "metaDescription": "The full governance chain of ACLIC, from the General Assembly to its department heads — every seat held by someone under eighteen."
   },
   "Leaders": {
     "eyebrow": "Our leaders",
@@ -87,14 +89,16 @@
       "advocacy": "Advocacy submissions",
       "partnership": "Partnerships"
     },
-    "emptyState": "Updates from this area are published as they are cleared for release."
+    "emptyState": "Updates from this area are published as they are cleared for release.",
+    "metaDescription": "Trainings, campaigns, General Assembly sessions, advocacy submissions, and partnerships — organized by category."
   },
   "Partners": {
     "eyebrow": "Partners",
     "heading": "Partners",
     "parentHeading": "Host and parent organizations",
     "otherHeading": "Coalition partners",
-    "placeholderLabel": "Partner"
+    "placeholderLabel": "Partner",
+    "metaDescription": "The organizations ACLIC works alongside, starting with its host organizations, OSD and Save the Children."
   },
   "Membership": {
     "eyebrow": "Join ACLIC",
@@ -104,12 +108,14 @@
     "involvesHeading": "What membership involves",
     "involvesBody": "Member structures take part in the General Assembly, contribute to department work, and take part in elections for coalition leadership.",
     "applyCta": "Apply for membership",
-    "applyNote": "The application opens in a new tab."
+    "applyNote": "The application opens in a new tab.",
+    "metaDescription": "How child-led structures join ACLIC and what membership involves."
   },
   "Resources": {
     "eyebrow": "Reports & resources",
     "heading": "Reports & resources",
-    "emptyState": "Nothing has been published here yet. Check back as reports and resources are cleared for release."
+    "emptyState": "Nothing has been published here yet. Check back as reports and resources are cleared for release.",
+    "metaDescription": "Reports and resources published by ACLIC."
   },
   "Contact": {
     "eyebrow": "Contact",
@@ -117,15 +123,18 @@
     "emailHeading": "Email",
     "phoneHeading": "Phone",
     "addressHeading": "Address",
-    "socialHeading": "Follow ACLIC"
+    "socialHeading": "Follow ACLIC",
+    "metaDescription": "How to reach ACLIC by email, phone, or social media."
   },
   "Privacy": {
     "eyebrow": "Privacy",
-    "heading": "Privacy & data"
+    "heading": "Privacy & data",
+    "metaDescription": "How ACLIC handles personal data collected through this website."
   },
   "Safeguarding": {
     "eyebrow": "Safeguarding",
-    "heading": "Child safeguarding statement"
+    "heading": "Child safeguarding statement",
+    "metaDescription": "ACLIC's child safeguarding statement."
   },
   "Newsletter": {
     "emailLabel": "Email address",

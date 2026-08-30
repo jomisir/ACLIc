@@ -1,12 +1,24 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { workItems, workCategoryEnum } from "@/db/schema";
 import { ImageSlot } from "@/components/ImageSlot";
+import { pageMetadata } from "@/lib/metadata";
 import type { Locale } from "@/i18n/routing";
 
 const titleCol = { en: "titleEn", am: "titleAm", om: "titleOm" } as const;
 const summaryCol = { en: "summaryEn", am: "summaryAm", om: "summaryOm" } as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Work" });
+  return pageMetadata({ locale, path: "/work", title: t("heading"), description: t("metaDescription") });
+}
 
 export default async function WorkPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
