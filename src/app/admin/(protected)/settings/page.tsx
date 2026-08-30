@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { getAllSettings } from "@/lib/settings";
 import { updateSetting } from "@/actions/settings";
 import { LocaleTabs } from "@/components/admin/LocaleTabs";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 const groups: { key: string; label: string; multilingual: boolean; hint?: string }[] = [
   { key: "mission_statement", label: "Mission statement", multilingual: true, hint: "Official wording only — leave empty until the coalition confirms it." },
@@ -37,9 +38,9 @@ export default async function AdminSettingsPage() {
               <form action={updateSetting.bind(null, g.key)}>
                 {g.multilingual ? (
                   <LocaleTabs
-                    en={<textarea name="valueEn" rows={4} defaultValue={row?.valueEn ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
-                    am={<textarea name="valueAm" rows={4} defaultValue={row?.valueAm ?? ""} lang="am" className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
-                    om={<textarea name="valueOm" rows={4} defaultValue={row?.valueOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
+                    en={<RichTextEditor name="valueEn" defaultValue={row?.valueEn ?? ""} />}
+                    am={<RichTextEditor name="valueAm" defaultValue={row?.valueAm ?? ""} lang="am" />}
+                    om={<RichTextEditor name="valueOm" defaultValue={row?.valueOm ?? ""} />}
                   />
                 ) : (
                   <input name="valueEn" defaultValue={row?.valueEn ?? ""} className="w-full max-w-md border border-[#c8a24a]/40 rounded px-3 py-2" />

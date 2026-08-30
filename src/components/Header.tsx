@@ -41,9 +41,19 @@ export async function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <Link
+            href="/search"
+            className="text-2xs uppercase tracking-[0.12em] border border-gold/40 rounded px-3 py-1.5 hover:border-gold transition-colors duration-150"
+          >
+            {t("search")}
+          </Link>
           <LanguageSwitcher locale={locale} label={tCommon("language")} />
           <ThemeToggle labels={{ light: tCommon("lightMode"), dark: tCommon("darkMode") }} />
-          <MobileNav links={[{ href: "/", label: t("home") }, ...links]} menuLabel={tCommon("menu")} closeLabel={tCommon("close")} />
+          <MobileNav
+            links={[{ href: "/", label: t("home") }, ...links, { href: "/search", label: t("search") }]}
+            menuLabel={tCommon("menu")}
+            closeLabel={tCommon("close")}
+          />
         </div>
       </div>
     </header>

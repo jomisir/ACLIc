@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { getPublishedPageBody } from "@/lib/content";
 import { pageMetadata } from "@/lib/metadata";
+import { RichText } from "@/components/RichText";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -28,7 +29,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
       {body?.body ? (
         <div className="measure">
           {body.fellBack && <p className="text-2xs text-muted mb-2">{tCommon("availableInEnglish")}</p>}
-          <p className="whitespace-pre-line">{body.body}</p>
+          <RichText html={body.body} />
         </div>
       ) : (
         <p className="measure text-muted">

@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { leaders } from "@/db/schema";
 import { requireRole, requestIp } from "@/auth/rbac";
 import { writeAudit } from "@/auth/audit";
+import { sanitizeRichText, sanitizePlainText } from "@/lib/sanitize";
 
 const schema = z.object({
   id: z.string().uuid(),
@@ -14,9 +15,9 @@ const schema = z.object({
   roleTitleEn: z.string().max(200).optional(),
   roleTitleAm: z.string().max(200).optional(),
   roleTitleOm: z.string().max(200).optional(),
-  bioEn: z.string().max(5000).optional(),
-  bioAm: z.string().max(5000).optional(),
-  bioOm: z.string().max(5000).optional(),
+  bioEn: z.string().max(100_000).optional(),
+  bioAm: z.string().max(100_000).optional(),
+  bioOm: z.string().max(100_000).optional(),
   displayOrder: z.coerce.number().int().min(0).default(0),
 });
 
@@ -27,13 +28,13 @@ export async function saveDraftLeader(formData: FormData) {
   await db
     .update(leaders)
     .set({
-      fullName: data.fullName ?? "",
-      roleTitleEn: data.roleTitleEn || null,
-      roleTitleAm: data.roleTitleAm || null,
-      roleTitleOm: data.roleTitleOm || null,
-      bioEn: data.bioEn || null,
-      bioAm: data.bioAm || null,
-      bioOm: data.bioOm || null,
+      fullName: sanitizePlainText(data.fullName) ?? "",
+      roleTitleEn: sanitizePlainText(data.roleTitleEn),
+      roleTitleAm: sanitizePlainText(data.roleTitleAm),
+      roleTitleOm: sanitizePlainText(data.roleTitleOm),
+      bioEn: sanitizeRichText(data.bioEn),
+      bioAm: sanitizeRichText(data.bioAm),
+      bioOm: sanitizeRichText(data.bioOm),
       displayOrder: data.displayOrder,
       updatedAt: new Date(),
     })

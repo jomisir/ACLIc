@@ -8,6 +8,13 @@
       "when": 1788088618518,
       "tag": "0000_polite_grandmaster",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788097876655,
+      "tag": "0001_furry_colossus",
+      "breakpoints": true
     }
   ]
 }

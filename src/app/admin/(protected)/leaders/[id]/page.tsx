@@ -11,6 +11,7 @@ import {
   uploadLeaderPhoto,
 } from "@/actions/leaders";
 import { LocaleTabs } from "@/components/admin/LocaleTabs";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { PhotoUploader } from "@/components/admin/PhotoUploader";
 
 export default async function EditLeaderPage({ params }: { params: Promise<{ id: string }> }) {
@@ -57,9 +58,9 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
         <div>
           <p className="text-sm font-medium mb-2">Biography</p>
           <LocaleTabs
-            en={<textarea name="bioEn" rows={6} defaultValue={leader.bioEn ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
-            am={<textarea name="bioAm" rows={6} defaultValue={leader.bioAm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" lang="am" />}
-            om={<textarea name="bioOm" rows={6} defaultValue={leader.bioOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
+            en={<RichTextEditor name="bioEn" defaultValue={leader.bioEn ?? ""} />}
+            am={<RichTextEditor name="bioAm" defaultValue={leader.bioAm ?? ""} lang="am" />}
+            om={<RichTextEditor name="bioOm" defaultValue={leader.bioOm ?? ""} />}
           />
         </div>
 

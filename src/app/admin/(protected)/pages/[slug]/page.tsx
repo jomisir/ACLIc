@@ -5,6 +5,7 @@ import { pages } from "@/db/schema";
 import { auth } from "@/auth";
 import { saveDraftPage, publishPage, unpublishPage } from "@/actions/pages";
 import { LocaleTabs } from "@/components/admin/LocaleTabs";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { ImageSlotManager } from "@/components/admin/ImageSlotManager";
 
 export default async function EditPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -39,9 +40,9 @@ export default async function EditPage({ params }: { params: Promise<{ slug: str
         <div>
           <p className="text-sm font-medium mb-2">Body</p>
           <LocaleTabs
-            en={<textarea name="bodyEn" rows={10} defaultValue={page.bodyEn ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
-            am={<textarea name="bodyAm" rows={10} defaultValue={page.bodyAm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" lang="am" />}
-            om={<textarea name="bodyOm" rows={10} defaultValue={page.bodyOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
+            en={<RichTextEditor name="bodyEn" defaultValue={page.bodyEn ?? ""} />}
+            am={<RichTextEditor name="bodyAm" defaultValue={page.bodyAm ?? ""} lang="am" />}
+            om={<RichTextEditor name="bodyOm" defaultValue={page.bodyOm ?? ""} />}
           />
         </div>
 

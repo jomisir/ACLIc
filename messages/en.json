@@ -9,7 +9,8 @@
     "membership": "Join ACLIC",
     "resources": "Reports & resources",
     "contact": "Contact",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "search": "Search"
   },
   "Common": {
     "readMore": "Read more",
@@ -165,5 +166,22 @@
     "heading": "Something went wrong on our end",
     "body": "Try again in a moment. If this keeps happening, let us know through the contact page.",
     "cta": "Back to home"
+  },
+  "Search": {
+    "eyebrow": "Search",
+    "heading": "Search this site",
+    "inputLabel": "Search terms",
+    "placeholder": "Search leaders, work, resources…",
+    "submit": "Search",
+    "tooShort": "Enter at least two characters to search.",
+    "noResults": "Nothing found for “{query}”. Try a different word, or browse the sections in the menu.",
+    "resultCount": "{count, plural, one {# result} other {# results}}",
+    "metaDescription": "Search published ACLIC leaders, work, resources, and pages.",
+    "kinds": {
+      "leader": "Leader",
+      "work": "What we do",
+      "resource": "Resource",
+      "page": "Page"
+    }
   }
 }

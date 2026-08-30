@@ -166,6 +166,27 @@ export const rateLimitEvents = pgTable("rate_limit_events", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * Privacy-friendly analytics. Deliberately stores DAILY AGGREGATE COUNTS
+ * only — one row per (day, path, locale) — so there is no per-visitor
+ * record at all: no IP, no user agent, no cookie, no session, nothing that
+ * could identify or re-identify a person. That matters more than usual
+ * here, because a large share of this site's visitors are children.
+ *
+ * A consequence worth knowing: this cannot report unique visitors, only
+ * page views. That is the intended trade.
+ */
+export const pageViews = pgTable(
+  "page_views",
+  {
+    day: date("day").notNull(),
+    path: text("path").notNull(), // locale-stripped, e.g. "/leaders"
+    locale: localeEnum("locale").notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.day, t.path, t.locale] })],
+);
+
 export const imageSlots = pgTable(
   "image_slots",
   {

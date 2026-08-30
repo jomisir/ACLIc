@@ -27,6 +27,11 @@ jobs:
 
       - run: npm ci
 
+      # Cheap checks first — they need no secrets and fail fast.
+      - run: npm run check:messages
+      - run: npm run typecheck
+      - run: npm run lint
+
       # Pages are statically generated at build time and read published
       # content straight from the database (mission/vision, leaders,
       # partners, ...), so the build needs real access to the production

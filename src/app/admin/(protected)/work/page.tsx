@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { workItems } from "@/db/schema";
 import { auth } from "@/auth";
 import { createWorkItem, publishWorkItem, unpublishWorkItem, deleteWorkItem } from "@/actions/work-items";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 const categories = [
   ["training", "Trainings"],
@@ -29,7 +30,10 @@ export default async function AdminWorkPage() {
           ))}
         </select>
         <input name="titleEn" placeholder="Title (English)" className="border border-[#c8a24a]/40 rounded px-3 py-2" />
-        <textarea name="summaryEn" placeholder="Short summary (English)" rows={3} className="border border-[#c8a24a]/40 rounded px-3 py-2" />
+        <div>
+          <label className="text-xs text-[#5a5e67] block mb-1">Short summary (English)</label>
+          <RichTextEditor name="summaryEn" defaultValue="" />
+        </div>
         <input name="occurredOn" type="date" className="border border-[#c8a24a]/40 rounded px-3 py-2 w-fit" />
         <select name="visibility" className="border border-[#c8a24a]/40 rounded px-3 py-2 w-fit">
           <option value="internal">Internal</option>

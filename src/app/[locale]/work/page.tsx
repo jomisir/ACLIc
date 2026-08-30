@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { workItems, workCategoryEnum } from "@/db/schema";
 import { ImageSlot } from "@/components/ImageSlot";
 import { pageMetadata } from "@/lib/metadata";
+import { RichText } from "@/components/RichText";
 import type { Locale } from "@/i18n/routing";
 
 const titleCol = { en: "titleEn", am: "titleAm", om: "titleOm" } as const;
@@ -63,7 +64,7 @@ export default async function WorkPage({ params }: { params: Promise<{ locale: L
                     <li key={item.id} className="border-l-2 border-gold/40 pl-4">
                       <p className="font-medium">{item[titleCol[locale]] ?? item.titleEn}</p>
                       {(item[summaryCol[locale]] ?? item.summaryEn) && (
-                        <p className="text-sm text-muted">{item[summaryCol[locale]] ?? item.summaryEn}</p>
+                        <RichText html={item[summaryCol[locale]] ?? item.summaryEn} className="text-sm text-muted" />
                       )}
                     </li>
                   ))}
