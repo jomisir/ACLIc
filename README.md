@@ -3,7 +3,11 @@
 The public website for the **Addis Child-Led Initiatives Coalition (ACLIC)**. Next.js 15
 (App Router, TypeScript), Tailwind CSS v4, Drizzle ORM over Postgres, Auth.js v5 for the
 admin panel, next-intl for English / Amharic / Afaan Oromoo, and Supabase Storage for
-uploads. Built to run on a plain self-hosted VPS — see `deploy.md`.
+uploads.
+
+Deployed to **cPanel shared hosting** (Yegara Premium) with the database on **Neon**
+and builds produced by **GitHub Actions** — see `deploy.md` for the full runbook and
+`deploy/yegara-feasibility.md` for why it is set up this way.
 
 ## Local setup
 
@@ -24,7 +28,7 @@ See `.env.example` for the full list. The important ones:
 
 | Variable | Purpose |
 | --- | --- |
-| `DATABASE_URL` | Postgres connection string (Supabase-hosted or self-hosted both work) |
+| `DATABASE_URL` | Neon Postgres connection string (see `deploy.md` step 2) |
 | `AUTH_SECRET` | Session signing secret — generate with `openssl rand -base64 32` |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL, used in metadata, sitemap, and email links |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Used once by `db:seed` to create the first superuser |
@@ -33,10 +37,10 @@ See `.env.example` for the full list. The important ones:
 
 ## Creating an admin user
 
-The first superuser comes from `ADMIN_EMAIL` / `ADMIN_PASSWORD` via `npm run db:seed` (it's
-idempotent — safe to leave in `.env.production` and re-run). To create additional accounts
-afterwards, sign in as a superuser and use **Admin → Users** — it generates a one-time
-temporary password that the account must change on first login.
+The first superuser comes from `ADMIN_EMAIL` / `ADMIN_PASSWORD` via `npm run db:seed`, run
+from your own machine against the remote database (it's idempotent — safe to re-run). To
+create additional accounts afterwards, sign in as a superuser and use **Admin → Users** — it
+generates a one-time temporary password that the account must change on first login.
 
 ## Adding a UI language string
 
@@ -63,6 +67,10 @@ DATABASE_URL=<production-url> npm run db:migrate
 tracked in a `__drizzle_migrations` table. Generate new migration files locally with
 `npm run db:generate` after changing `src/db/schema.ts`, commit them, then run `db:migrate`
 against production as part of the deploy (see `deploy.md`).
+
+**Migrations never run on the shared host.** `drizzle-kit` connects to Postgres on port 5432,
+which the shared host may not allow outbound; the app itself avoids this by using Neon's
+HTTP driver. Run migrations from your own machine or CI only.
 
 ## Project structure
 

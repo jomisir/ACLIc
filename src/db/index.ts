@@ -1,4 +1,4 @@
-import { neon } from "@neondatabase/serverless";
+import { neon, neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
@@ -26,6 +26,15 @@ const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
   throw new Error("DATABASE_URL is not set");
+}
+
+// Local development escape hatch. Neon's driver normally derives its endpoint
+// from the connection host (https://<host>/sql); pointing it elsewhere lets
+// you develop against a plain local Postgres through a proxy that speaks the
+// same SQL-over-HTTP protocol, with no Neon account needed. Leave this UNSET
+// in production, where the default (real Neon over HTTPS) is what you want.
+if (process.env.NEON_FETCH_ENDPOINT) {
+  neonConfig.fetchEndpoint = process.env.NEON_FETCH_ENDPOINT;
 }
 
 const sql = neon(connectionString);

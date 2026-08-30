@@ -1,124 +1,221 @@
-# Deploying ACLIC to a self-hosted VPS
+# Deploying ACLIC to Yegara Premium (cPanel shared hosting)
 
-Target: a small Linux VPS (2GB RAM is enough), Node 20 LTS, nginx in front, TLS via
-certbot. No Vercel services are used anywhere in this stack.
+This is the **only** deployment path for this project. The earlier VPS
+artifacts (Dockerfile, docker-compose, nginx conf, systemd unit, PM2 config)
+have been deleted so there is no second, contradictory story to follow.
 
-## 1. Buy and point the domain
+Architecture on this host:
 
-1. Buy the domain from any registrar.
-2. In the registrar's DNS panel, create an **A record** (and an **AAAA record** if the VPS
-   has IPv6) pointing the root domain and `www` at the VPS's IP address:
+| Piece | Where it runs |
+| --- | --- |
+| Next.js app | cPanel "Setup Node.js App" (Phusion Passenger), started via `app.js` |
+| Database | Neon (managed Postgres), reached over **HTTPS/443**, not 5432 |
+| File storage | Supabase Storage (private bucket, HTTPS) |
+| Build | GitHub Actions — **never** on the shared host |
+| Migrations | Your machine or CI — **never** on the shared host |
+| Backups | GitHub Actions, nightly |
+| Mail | cPanel mailbox on the Yegara mail host, authenticated SMTP |
+
+Read `deploy/yegara-feasibility.md` first if you want the reasoning behind
+these choices, including the one open question about Passenger's port model.
+
+---
+
+## 0. Before anything else: verify the Passenger model (5 minutes)
+
+`deploy/yegara-feasibility.md` flags one assumption worth testing before you
+build anything on top of it: that Yegara's Node.js Selector runs a
+**self-listening** app that binds `process.env.PORT` (what Next's standalone
+server does), rather than expecting `module.exports = app`.
+
+Create a throwaway Node app in cPanel with this as the startup file:
+
+```js
+const http = require("http");
+http
+  .createServer((_req, res) => res.end("ok"))
+  .listen(process.env.PORT || 3000);
+```
+
+If the app's URL returns `ok`, the model is confirmed and everything below
+works. If it does not, stop and raise it — that changes the approach, and it
+is far cheaper to learn now.
+
+## 1. Order hosting and point the domain
+
+1. Order the Yegara Premium plan; note the nameservers in the welcome email.
+2. At your domain registrar, set the nameservers to Yegara's, **or** keep your
+   registrar's DNS and add an `A` record for `@` and `www` pointing at the
+   account's IP (shown in cPanel → right sidebar → "Shared IP Address").
+3. Wait for propagation. Check with `dig aclic.org +short` before continuing —
+   AutoSSL in step 7 will fail if DNS has not resolved yet.
+
+## 2. Create the Neon database
+
+1. Sign up at [neon.tech](https://neon.tech) and create a project. Choose the
+   region closest to your users; from Addis Ababa, an EU region (e.g.
+   `eu-central-1`) is a reasonable pick, and matches the UK datacentre the
+   site itself runs in.
+2. Copy the **pooled** connection string from the Neon dashboard. It looks
+   like:
+   `postgresql://user:password@ep-xxx-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require`
+3. That single string is your `DATABASE_URL` everywhere: the app, the GitHub
+   Actions secrets, and your local `.env` when running migrations.
+
+The app talks to Neon over HTTPS via `@neondatabase/serverless`, so it does
+not matter whether the shared host allows outbound 5432 — but `pg_dump` and
+`drizzle-kit` **do** use 5432, which is exactly why those run off-host.
+
+## 3. Run migrations (from your machine, not the host)
+
+```bash
+git clone <this-repo> aclic && cd aclic
+npm ci
+cp .env.example .env        # fill in DATABASE_URL from step 2
+npm run db:migrate          # creates all 13 tables
+npm run db:seed             # first superuser + empty content rows
+```
+
+`db:seed` is idempotent — safe to re-run. It reads `ADMIN_EMAIL` and
+`ADMIN_PASSWORD` from `.env` to create the first superuser, who is forced to
+change their password on first login.
+
+Re-run `npm run db:migrate` against the same `DATABASE_URL` whenever a
+migration is added. Never attempt this from cPanel's terminal.
+
+## 4. Set up Supabase Storage
+
+1. Create a Supabase project (the free tier is sufficient).
+2. Storage → New bucket → name it `aclic-media`, and leave it **private**.
+   The app serves files through gated route handlers that check publication
+   status, so the bucket must never be public.
+3. From Project Settings → API, note the project URL and the `service_role`
+   key. The `service_role` key is server-only — never expose it to the
+   browser and never commit it.
+
+## 5. Build the deploy artifact (GitHub Actions)
+
+The shared host has no build toolchain and will likely OOM running
+`next build`. Build in CI instead.
+
+1. In the GitHub repo: Settings → Secrets and variables → Actions, add
+   `DATABASE_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`, `SUPABASE_URL`,
+   `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_STORAGE_BUCKET`.
+   (The build needs database access because pages are statically generated
+   from published content at build time.)
+2. Actions → "Build deploy artifact (Yegara/cPanel)" → Run workflow.
+3. Download `aclic-deploy.zip` from the finished run.
+
+Its layout is exactly what the cPanel application root must contain:
+
+```
+app.js
+.next/standalone/server.js
+.next/standalone/node_modules/...
+.next/standalone/.next/static/...
+.next/standalone/public/...
+```
+
+## 6. Set up the Node.js app in cPanel
+
+1. cPanel → **Setup Node.js App** → Create Application.
+2. Fill in:
+   - **Node.js version**: 20 or newer (`package.json` requires `>=20`).
+   - **Application mode**: Production
+   - **Application root**: `aclic` (creates `/home/<user>/aclic`)
+   - **Application URL**: your domain
+   - **Application startup file**: `app.js`
+3. Click Create, then **Stop** the app while you upload files.
+4. cPanel → File Manager → navigate to `/home/<user>/aclic` → Upload
+   `aclic-deploy.zip` → right-click → Extract. Confirm `app.js` sits at the
+   root of that folder, with `.next/` beside it.
+5. Back in Setup Node.js App, add the environment variables (see next
+   section), then **Start** the app.
+
+Do **not** run `npm install` from the "Run NPM Install" button — the artifact
+already contains the traced `node_modules`, and a fresh install on the host
+risks both OOM and a missing `sharp` binary.
+
+## 7. Environment variables
+
+Add these in cPanel → Setup Node.js App → your app → **Environment
+variables**. This is where they live in production; there is no
+`.env.production` file on this host.
+
+| Variable | Value |
+| --- | --- |
+| `DATABASE_URL` | Neon pooled connection string (step 2) |
+| `AUTH_SECRET` | `openssl rand -base64 32` |
+| `NEXT_PUBLIC_SITE_URL` | `https://aclic.org` |
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase `service_role` key |
+| `SUPABASE_STORAGE_BUCKET` | `aclic-media` |
+| `SMTP_HOST` | `mail.aclic.org` (step 9) |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | the full mailbox address |
+| `SMTP_PASS` | that mailbox's password |
+| `SMTP_FROM` | `ACLIC <no-reply@aclic.org>` |
+
+Restart the app after changing any of them — Passenger does not pick up
+changes live.
+
+## 8. TLS (AutoSSL)
+
+cPanel → **SSL/TLS Status** → select the domain and `www` → **Run AutoSSL**.
+Let's Encrypt certificates are issued and renewed automatically. If issuance
+fails, DNS has not propagated yet — recheck step 1.
+
+Once TLS is live, confirm `https://aclic.org` loads and that `http://` is
+redirected. Also confirm `https://aclic.org/admin` is reachable but
+**not indexed** — the app sends `X-Robots-Tag: noindex` on `/admin/*` and
+`robots.txt` disallows it.
+
+## 9. Mailboxes and deliverability
+
+1. cPanel → **Email Accounts** → Create → e.g. `no-reply@aclic.org`. Use a
+   strong password; it becomes `SMTP_PASS`.
+2. cPanel → **Email Deliverability** → for your domain:
+   - Click **Manage**, then install the suggested **SPF** and **DKIM**
+     records. cPanel generates both and can apply them for you if it manages
+     your DNS. If DNS lives at your registrar, copy the records across
+     manually.
+3. **DMARC is not generated by cPanel — add it manually** as a TXT record:
 
    ```
-   A     @      <VPS_IPV4>
-   A     www    <VPS_IPV4>
+   Name:  _dmarc.aclic.org
+   Value: v=DMARC1; p=none; rua=mailto:dmarc@aclic.org; fo=1
    ```
-3. DNS propagation can take a few minutes to a few hours. Check with `dig aclic.org +short`
-   before moving on to TLS.
 
-## 2. Provision the server
+   Start at `p=none` (monitor only). After a few weeks of clean reports,
+   tighten to `p=quarantine` and then `p=reject`.
+4. Send a real test: submit the newsletter form on the live site and confirm
+   the confirmation email arrives and is not marked as spam. This also
+   verifies outbound SMTP is not firewalled — the one service assumption
+   `deploy/yegara-feasibility.md` could not confirm in advance.
 
-```bash
-# As root or via sudo on a fresh Ubuntu 22.04/24.04 VPS:
-apt update && apt upgrade -y
-apt install -y nginx certbot python3-certbot-nginx git
+## 10. Backups
 
-# Node 20 LTS
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-apt install -y nodejs
+Nightly backups run in GitHub Actions (`.github/workflows/backup.yml`,
+02:00 UTC) using the same secrets from step 5. Each run keeps a 30-day
+artifact containing a `pg_dump` of Neon plus a full copy of the storage
+bucket.
 
-npm install -g pm2   # or skip this and use the systemd unit in deploy/aclic.service instead
+Restore procedure — tested end to end — is in `deploy/restore.md`.
 
-useradd --system --create-home --shell /bin/bash aclic
-mkdir -p /opt/aclic
-chown aclic:aclic /opt/aclic
-```
+There is nothing to schedule in cPanel's cron for backups. If you do want a
+cPanel cron job for something else, note that it runs on the shared host and
+therefore cannot reach Postgres on 5432.
 
-## 3. First deploy
+## 11. Redeploying after a change
 
-```bash
-su - aclic
-cd /opt/aclic
-git clone <this-repo-url> src
-cd src
-cp .env.example .env.production
-# Edit .env.production: DATABASE_URL, AUTH_SECRET, NEXT_PUBLIC_SITE_URL,
-# ADMIN_EMAIL/ADMIN_PASSWORD (first run only), SUPABASE_*, SMTP_*.
+1. Merge your change.
+2. Run the "Build deploy artifact" workflow again; download the new zip.
+3. If the change includes a migration, run `npm run db:migrate` from your
+   machine **before** deploying the new code.
+4. cPanel → Setup Node.js App → **Stop** the app.
+5. File Manager → delete the old `app.js` and `.next/` from the application
+   root, upload and extract the new zip.
+6. **Start** the app, and load the site to confirm.
 
-npm ci
-npm run db:migrate
-npm run db:seed        # creates the first superuser and empty content rows — safe to re-run
-npm run build
-
-# Copy the standalone output into the layout nginx.conf expects (/opt/aclic/app):
-mkdir -p /opt/aclic/app
-cp -r .next/standalone/. /opt/aclic/app/
-cp -r .next/static /opt/aclic/app/.next/static
-cp -r public /opt/aclic/app/public
-cp .env.production /opt/aclic/app/.env.production
-```
-
-Start it (pick one):
-
-```bash
-# PM2:
-pm2 start /opt/aclic/src/deploy/ecosystem.config.js
-pm2 save
-pm2 startup   # follow the printed instructions to enable on boot
-
-# — or — systemd:
-sudo cp /opt/aclic/src/deploy/aclic.service /etc/systemd/system/aclic.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now aclic
-```
-
-Confirm it's up locally before wiring nginx: `curl -I http://127.0.0.1:3000/en`.
-
-## 4. nginx + TLS
-
-```bash
-cp /opt/aclic/src/deploy/nginx.conf /etc/nginx/sites-available/aclic.org
-# Edit the file: replace aclic.org with the real domain, and fix the
-# /opt/aclic/app paths if you deployed somewhere else.
-ln -s /etc/nginx/sites-available/aclic.org /etc/nginx/sites-enabled/
-nginx -t && systemctl reload nginx
-
-certbot --nginx -d aclic.org -d www.aclic.org
-# certbot rewrites the server block to add the ssl_certificate lines and sets
-# up automatic renewal via a systemd timer (certbot.timer) — no cron needed.
-```
-
-Visit `https://aclic.org` and confirm the site loads over HTTPS with a valid certificate.
-
-## 5. Nightly backups
-
-```bash
-crontab -u aclic -e
-# Add:
-0 2 * * * . /opt/aclic/app/.env.production && /opt/aclic/src/deploy/backup.sh >> /var/log/aclic-backup.log 2>&1
-```
-
-See `deploy/restore.md` for the tested restore procedure.
-
-## 6. Redeploying after changes
-
-```bash
-su - aclic
-cd /opt/aclic/src
-git pull
-npm ci
-npm run db:migrate   # no-op if there's nothing new to apply
-npm run build
-rm -rf /opt/aclic/app/.next /opt/aclic/app/*.js /opt/aclic/app/node_modules
-cp -r .next/standalone/. /opt/aclic/app/
-cp -r .next/static /opt/aclic/app/.next/static
-cp -r public /opt/aclic/app/public
-pm2 restart aclic   # or: sudo systemctl restart aclic
-```
-
-## Alternative: Docker
-
-If you'd rather not manage Node/PM2/nginx directly on the host, `Dockerfile` and
-`docker-compose.yml` at the repo root are a drop-in alternative — `docker compose up -d
---build` builds the standalone image and (optionally) a local Postgres container. Put nginx
-and certbot in front of the container the same way, proxying to the port it publishes.
+Keep the previous zip until the new one is confirmed working — rolling back
+is just re-extracting the old artifact.

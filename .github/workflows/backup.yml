@@ -1,0 +1,58 @@
+name: Nightly backup (Neon + Supabase Storage)
+
+# Replaces the old deploy/backup.sh, which assumed a VPS with cron, a
+# writable /var/backups and a local pg_dump. On cPanel shared hosting none
+# of that is available, so backups run here instead and are retained as
+# workflow artifacts.
+#
+# Retention is 30 days, matching the previous policy. Restore procedure:
+# deploy/restore.md.
+on:
+  schedule:
+    - cron: "0 2 * * *" # 02:00 UTC daily
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The runner's bundled pg_dump must be >= the server version, so
+      # install the current PostgreSQL client rather than relying on
+      # whatever ships with the image.
+      - name: Install PostgreSQL client
+        run: |
+          set -euo pipefail
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+            --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] \
+            https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
+
+      - name: Dump database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          mkdir -p backup
+          pg_dump --format=custom \
+            --file="backup/aclic-$(date -u +%Y%m%dT%H%M%SZ).dump" \
+            "$DATABASE_URL"
+          ls -lh backup/
+
+      - name: Sync Supabase Storage bucket
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_STORAGE_BUCKET: ${{ secrets.SUPABASE_STORAGE_BUCKET }}
+        run: node .github/scripts/backup-storage.mjs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aclic-backup-${{ github.run_id }}
+          path: backup/
+          retention-days: 30
