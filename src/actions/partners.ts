@@ -32,6 +32,11 @@ export async function saveDraftPartner(formData: FormData) {
 
   await writeAudit({ userId: user.id, action: "update", objectType: "partner", objectId: data.id, ip: await requestIp() });
   revalidatePath(`/admin/partners`);
+  // An edit to an already-published record changes what visitors see, so the
+  // public page has to be rebuilt too. Only revalidating the admin route means
+  // the editor sees the fix and the public site keeps the old text until
+  // someone toggles publish or the site is redeployed.
+  revalidatePath("/[locale]/partners", "page");
 }
 
 export async function publishPartner(id: string) {

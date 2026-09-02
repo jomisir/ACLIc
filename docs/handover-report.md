@@ -218,10 +218,13 @@ obligations. These controls are what make a public leaders page defensible.
 
 | Control | Implementation |
 |---|---|
-| Guardian consent gate | A leader profile **cannot be published** without recorded consent — enforced in the server action, not the UI. Superuser only. |
+| Guardian consent gate | A leader profile **cannot be published** without recorded consent — enforced in the server action, not the UI. Superuser only. **Consent is also required at every point the profile is read**: the public leaders page, search, the leader photo route and the media route each check it independently, so a profile can never be visible with consent withdrawn regardless of how `status` was set. |
+| Withdrawing consent | Revoking consent unpublishes the profile in the same write and rebuilds the public page immediately. It does not wait for someone to remember to press Unpublish. |
+| Erasing a profile | Superuser only. Clears name, biographies, photograph and recorded consent, and deletes the photo from storage. The position and its place in the structure remain, so the slot is left empty for the next holder. This is the answer to a guardian asking for the data to be removed rather than hidden. |
 | No identifying fields | Date of birth, age, school, neighbourhood, phone, personal email and social handles **do not exist in the schema at all** |
 | EXIF stripping | Every uploaded image passes through sharp, which drops metadata including GPS; capped at 800px |
-| Gated file serving | Photos, logos, media and resources are served through route handlers that check publication status; nothing sits behind a public bucket URL |
+| Gated file serving | Photos, logos, media and resources are served through route handlers that check publication status (and guardian consent, for leader photographs); nothing sits behind a public bucket URL |
+| Deletion reaches storage | Deleting a resource, or erasing a leader profile, removes the stored file as well as the database row, and rebuilds the public page. A takedown actually takes the file down. |
 | One-click unpublish | Takes a profile down immediately without deleting the record |
 | Analytics | Daily aggregates only, no per-visitor data |
 | Search | No query logging |
@@ -280,6 +283,16 @@ deploy.
 - Message files: 143 keys × 3 locales, no drift, all valid ICU
 - `sharp`'s native binary confirmed present in the built artifact
 - Migrations applied and seed script run against a real Postgres instance
+- The consent gate driven through every state against a running build: only
+  `consent recorded + published` is visible, and the other three combinations
+  are hidden on the leaders page, in search, on the leader photo route and on
+  the media route. Revoking consent through the admin UI was confirmed to
+  unpublish the profile and remove it from the public page in the same step.
+- Erasing a profile confirmed to clear the personal columns and leave the
+  position intact, with the storage failure path exercised (row cleared, the
+  failure logged rather than swallowed or aborting the erase)
+- Image slot captions saved in all three languages from a non-English tab and
+  read back intact — previously an English-only save blanked the other two
 - Trilingual admin editing driven end to end in a real browser against the
   built server: a work item created with English, Amharic and Afaan Oromoo
   title and summary, reopened through its edit screen with all six fields

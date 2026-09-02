@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { leaders } from "@/db/schema";
 import { pageMetadata } from "@/lib/metadata";
@@ -25,10 +25,13 @@ export default async function LeadersPage({ params }: { params: Promise<{ locale
   const t = await getTranslations({ locale, namespace: "Leaders" });
   const tCommon = await getTranslations({ locale, namespace: "Common" });
 
+  // Consent is required here as well as at publish time: a profile must never
+  // be visible with consent withdrawn, whatever route set `status`.
+  // See setGuardianConsent in src/actions/leaders.ts.
   const rows = await db
     .select()
     .from(leaders)
-    .where(eq(leaders.status, "published"))
+    .where(and(eq(leaders.status, "published"), eq(leaders.guardianConsent, true)))
     .orderBy(asc(leaders.displayOrder));
 
   return (

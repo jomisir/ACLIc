@@ -63,6 +63,8 @@ export async function searchContent(query: string, locale: Locale): Promise<Sear
       .where(
         and(
           eq(leaders.status, "published"),
+          // Same consent requirement as the public leaders page.
+          eq(leaders.guardianConsent, true),
           or(
             ilike(leaders.fullName, pattern),
             ilike(leaders.roleTitleEn, pattern),

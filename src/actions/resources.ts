@@ -8,7 +8,7 @@ import { db } from "@/db";
 import { resources } from "@/db/schema";
 import { requireRole, requestIp } from "@/auth/rbac";
 import { writeAudit } from "@/auth/audit";
-import { uploadToStorage } from "@/lib/storage";
+import { uploadToStorage, deleteFromStorage } from "@/lib/storage";
 import { sanitizePlainText } from "@/lib/sanitize";
 
 const metaSchema = z.object({
@@ -91,7 +91,25 @@ export async function unpublishResource(id: string) {
 
 export async function deleteResource(id: string) {
   const user = await requireRole("superuser");
+
+  const [row] = await db.select().from(resources).where(eq(resources.id, id)).limit(1);
   await db.delete(resources).where(eq(resources.id, id));
+
+  // Remove the stored object too. Dropping only the row leaves the document
+  // sitting in the bucket for good, which is the wrong answer to "delete this"
+  // — particularly for a takedown request. The row is gone either way, so a
+  // storage failure must not turn into a half-completed delete.
+  if (row?.filePath) {
+    try {
+      await deleteFromStorage(row.filePath);
+    } catch (err) {
+      console.error(`[resources] row ${id} deleted but ${row.filePath} remains in storage:`, err);
+    }
+  }
+
   await writeAudit({ userId: user.id, action: "delete", objectType: "resource", objectId: id, ip: await requestIp() });
   revalidatePath("/admin/resources");
+  // Deleting a published resource is the takedown path — it has to leave the
+  // public page too, not just the admin list.
+  revalidatePath("/[locale]/resources", "page");
 }

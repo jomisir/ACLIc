@@ -88,4 +88,7 @@ export async function deleteWorkItem(id: string) {
   await db.delete(workItems).where(eq(workItems.id, id));
   await writeAudit({ userId: user.id, action: "delete", objectType: "work_item", objectId: id, ip: await requestIp() });
   revalidatePath("/admin/work");
+  // Deleting a published item is the takedown path — it has to leave the
+  // public page too, not just the admin list.
+  revalidatePath("/[locale]/work", "page");
 }

@@ -5,6 +5,15 @@ import { pageViews } from "@/db/schema";
 import { locales, type Locale } from "@/i18n/routing";
 
 /**
+ * How often a page view also triggers a retention sweep. Shared hosting gives
+ * us no cron hook, so the sweep piggybacks on ordinary traffic — the same
+ * approach `src/lib/rate-limit.ts` takes for its own expired rows. One in a
+ * thousand views is frequent enough to keep the table bounded and rare enough
+ * to cost nothing noticeable.
+ */
+const SWEEP_PROBABILITY = 0.001;
+
+/**
  * Records one page view as a daily aggregate increment.
  *
  * Privacy: nothing identifying is stored — no IP, user agent, cookie or
@@ -30,6 +39,10 @@ export async function recordPageView(rawPath: string, locale: string) {
         target: [pageViews.day, pageViews.path, pageViews.locale],
         set: { count: sql`${pageViews.count} + 1` },
       });
+
+    if (Math.random() < SWEEP_PROBABILITY) {
+      await pruneOldAnalytics();
+    }
   } catch {
     // Swallowed on purpose — see above.
   }
@@ -123,7 +136,7 @@ export async function getSubscriberGrowth(days = 30) {
   return rows;
 }
 
-/** Retention: analytics rows older than this are pruned by the admin action. */
+/** Retention window for analytics rows. */
 export const ANALYTICS_RETENTION_DAYS = 400;
 
 export async function pruneOldAnalytics() {

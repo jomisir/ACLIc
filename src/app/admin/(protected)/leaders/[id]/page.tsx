@@ -8,6 +8,7 @@ import {
   publishLeader,
   unpublishLeader,
   setGuardianConsent,
+  clearLeaderProfile,
   uploadLeaderPhoto,
 } from "@/actions/leaders";
 import { LocaleTabs } from "@/components/admin/LocaleTabs";
@@ -80,6 +81,11 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
               {leader.guardianConsent ? "Revoke consent" : "Record consent"}
             </button>
           </form>
+          {leader.guardianConsent && (
+            <p className="text-xs text-[#5a5e67] mt-2">
+              Revoking consent also unpublishes this profile immediately.
+            </p>
+          )}
 
           <div className="flex gap-3 mt-6">
             {leader.status === "draft" ? (
@@ -96,6 +102,22 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
               </form>
             )}
           </div>
+          <div className="mt-8 border-t border-[#c8a24a]/30 pt-5">
+            <h3 className="text-sm font-medium mb-1">Erase this profile</h3>
+            <p className="text-xs text-[#5a5e67] mb-3 max-w-prose">
+              Removes the name, biographies, photograph and recorded consent, and deletes
+              the photo file from storage. The position and its place in the structure stay,
+              so the slot is left empty and unpublished for whoever holds the role next.
+              Use this when a guardian asks for the data to be removed rather than hidden —
+              it cannot be undone.
+            </p>
+            <form action={clearLeaderProfile.bind(null, leader.id)}>
+              <button type="submit" className="text-sm border border-red-700 text-red-700 rounded px-3 py-1.5">
+                Erase profile data
+              </button>
+            </form>
+          </div>
+
           {!leader.guardianConsent && leader.status === "draft" && (
             <p className="text-xs text-amber-700 mt-2">Publishing is blocked until guardian consent is recorded.</p>
           )}

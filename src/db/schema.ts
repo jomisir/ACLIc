@@ -149,6 +149,17 @@ export const subscribers = pgTable("subscribers", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * UNUSED. Login throttling is done entirely by `rate_limit_events` below,
+ * under the scope "login" — see src/auth/index.ts and src/lib/rate-limit.ts.
+ * Nothing reads or writes this table.
+ *
+ * It is kept only so the schema still matches the deployed database; dropping
+ * it needs a migration. Do not start writing to it without deciding on a
+ * retention policy first: unlike `rate_limit_events`, which stores an opaque
+ * key, these columns hold an IP address next to an email address, which is
+ * personal data with no expiry attached.
+ */
 export const loginAttempts = pgTable("login_attempts", {
   id: uuid("id").primaryKey().defaultRandom(),
   ip: text("ip").notNull(),
@@ -158,7 +169,8 @@ export const loginAttempts = pgTable("login_attempts", {
 });
 
 // Generic Postgres-backed rate limiter — one row per attempt, counted over a
-// rolling window. Used for the newsletter form in addition to login_attempts.
+// rolling window. Backs both login throttling (scope "login") and the
+// newsletter form (scope "newsletter_signup"). Sweeps its own expired rows.
 export const rateLimitEvents = pgTable("rate_limit_events", {
   id: uuid("id").primaryKey().defaultRandom(),
   scope: text("scope").notNull(), // e.g. "newsletter_signup"
