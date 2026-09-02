@@ -63,6 +63,10 @@ export async function updateWorkItem(id: string, formData: FormData) {
 
   await writeAudit({ userId: user.id, action: "update", objectType: "work_item", objectId: id, ip: await requestIp() });
   revalidatePath("/admin/work");
+  revalidatePath(`/admin/work/${id}`);
+  // An edit to an already-published item changes what the public page shows,
+  // so that page has to be rebuilt as well — not just the admin list.
+  revalidatePath("/[locale]/work", "page");
 }
 
 export async function publishWorkItem(id: string) {

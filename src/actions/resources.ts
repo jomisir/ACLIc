@@ -9,6 +9,7 @@ import { resources } from "@/db/schema";
 import { requireRole, requestIp } from "@/auth/rbac";
 import { writeAudit } from "@/auth/audit";
 import { uploadToStorage } from "@/lib/storage";
+import { sanitizePlainText } from "@/lib/sanitize";
 
 const metaSchema = z.object({
   titleEn: z.string().max(300).optional(),
@@ -23,6 +24,9 @@ export async function uploadResource(formData: FormData) {
   const user = await requireRole("superuser", "user");
   const data = metaSchema.parse(Object.fromEntries(formData));
 
+  const titleEn = sanitizePlainText(data.titleEn);
+  if (!titleEn) throw new Error("An English title is required.");
+
   const file = formData.get("file");
   if (!(file instanceof File)) throw new Error("No file provided.");
   if (file.size > MAX_UPLOAD_BYTES) throw new Error("File too large.");
@@ -32,9 +36,9 @@ export async function uploadResource(formData: FormData) {
   await uploadToStorage(path, buffer, file.type || "application/octet-stream");
 
   await db.insert(resources).values({
-    titleEn: data.titleEn || null,
-    titleAm: data.titleAm || null,
-    titleOm: data.titleOm || null,
+    titleEn,
+    titleAm: sanitizePlainText(data.titleAm),
+    titleOm: sanitizePlainText(data.titleOm),
     filePath: path,
     fileSize: file.size,
     uploadedBy: user.id,
@@ -44,6 +48,31 @@ export async function uploadResource(formData: FormData) {
 
   await writeAudit({ userId: user.id, action: "create", objectType: "resource", ip: await requestIp() });
   revalidatePath("/admin/resources");
+}
+
+/**
+ * Edits a resource's metadata. The stored file is deliberately not replaceable
+ * here — replacing it would orphan the old object and change what an already
+ * published link resolves to. Delete and re-upload instead.
+ */
+export async function updateResource(id: string, formData: FormData) {
+  const user = await requireRole("superuser", "user");
+  const data = metaSchema.parse(Object.fromEntries(formData));
+
+  await db
+    .update(resources)
+    .set({
+      titleEn: sanitizePlainText(data.titleEn),
+      titleAm: sanitizePlainText(data.titleAm),
+      titleOm: sanitizePlainText(data.titleOm),
+      visibility: data.visibility,
+    })
+    .where(eq(resources.id, id));
+
+  await writeAudit({ userId: user.id, action: "update", objectType: "resource", objectId: id, ip: await requestIp() });
+  revalidatePath("/admin/resources");
+  revalidatePath(`/admin/resources/${id}`);
+  revalidatePath("/[locale]/resources", "page");
 }
 
 export async function publishResource(id: string) {

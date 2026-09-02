@@ -119,6 +119,18 @@ button is not access control. `requireRole()` appears in all 13 action modules.
 Screens: dashboard, analytics, pages, leaders, partners, what-we-do, resources,
 media library, newsletter, settings, users, audit log.
 
+**Everything with a translated column is editable in all three languages.**
+Pages, leader profiles, media alt text, settings, work items and resources all
+present an English / Amharic / Afaan Oromoo tab set, and every one of those
+records has an edit screen — a typo never needs a delete-and-recreate.
+
+The tabs keep all three locales mounted and merely hide the inactive ones, so a
+single plain `<form>` submits every language at once. That has one consequence
+worth knowing when editing these screens: a `required` attribute must never go
+on a field inside a tab panel. A browser cannot focus a hidden invalid control,
+so it silently refuses to submit and shows the editor nothing. Required fields
+are enforced in the server action instead — see `uploadResource`.
+
 ---
 
 ## 6. The three most recent features
@@ -268,6 +280,13 @@ deploy.
 - Message files: 143 keys × 3 locales, no drift, all valid ICU
 - `sharp`'s native binary confirmed present in the built artifact
 - Migrations applied and seed script run against a real Postgres instance
+- Trilingual admin editing driven end to end in a real browser against the
+  built server: a work item created with English, Amharic and Afaan Oromoo
+  title and summary, reopened through its edit screen with all six fields
+  prefilled, amended, published, and then confirmed rendering the correct
+  language on `/en/work`, `/am/work` and `/om/work` and matching in search.
+  The same round trip was run for a resource's three titles. Audit rows were
+  written for both updates.
 
 ---
 
