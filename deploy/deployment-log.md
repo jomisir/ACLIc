@@ -83,6 +83,27 @@ needed on the host.
 
 ---
 
+### Account facts supplied by the account holder
+
+| Fact | Value |
+|---|---|
+| Domain | `aclic.org` |
+| Node.js versions offered by the Node.js Selector | 20 available ✅ (satisfies `engines: >=20`) |
+| DNS pointed at Yegara? | **No, not yet** |
+
+The DNS answer changes the Gate 0 method. A subdomain would need DNS just as
+much as the apex does, so it buys nothing here; and cPanel's temporary
+`~username` URL sends a different `Host` header, which will not match the
+domain's vhost and therefore may never reach the Passenger app at all.
+
+Gate 0 will instead target a path on the real domain and bypass DNS at the
+client end with `curl --resolve` (and a hosts entry for browser testing).
+That exercises the true vhost and the true Passenger configuration, so the
+result is meaningful rather than an artefact of the test setup.
+
+Because DNS is unpointed, AutoSSL has not run, so Gate 0 runs over **HTTP**.
+That is expected and does not affect what the test measures.
+
 ### GATE 0 — Passenger port binding
 
 **Status: ⏳ waiting on the account holder.**
