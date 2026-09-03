@@ -22,13 +22,18 @@ const roleCol = { en: "roleTitleEn", am: "roleTitleAm", om: "roleTitleOm" } as c
  * the translated generic label, so the diagram reads correctly in Amharic and
  * Afaan Oromoo before anyone has renamed anything.
  *
- * Layout note: the desktop row gives each of the 13 nodes 66x44px at 9px type,
- * so a name much longer than "Child Protection" will wrap past the box and be
- * clipped by the foreignObject. The full name always reaches assistive tech and
- * hover through the node's <title> and aria-label, but if the real department
- * names turn out long, the row needs rethinking — numbered nodes with a legend
- * beneath the diagram is the obvious alternative. Worth checking once ACLIC
- * supplies the actual names, in Amharic especially.
+ * These names are NOT drawn inside the nodes. Thirteen boxes across the row
+ * leaves each one 66px wide, which forced 9px type — too small to read on its
+ * own terms, and worse in Ethiopic, where the characters carry more internal
+ * detail than Latin ones and degrade faster as they shrink. This diagram is the
+ * piece that carries the argument to a ministry official; it cannot be the part
+ * of the page nobody can read.
+ *
+ * So the nodes are numbered and the names live in a legend beneath, at a normal
+ * reading size. Department names of any length stop being a layout constraint,
+ * both scripts stay legible, and a numbered chart with a key is if anything the
+ * more formal convention for an org chart. Each node still announces its full
+ * name to assistive tech and on hover, so the numbering is purely visual.
  */
 async function departmentLabels(locale: Locale, fallback: string): Promise<string[]> {
   const rows = await db
@@ -85,12 +90,21 @@ function NodeBox({
   label,
   interactive,
   onFocusDetail,
+  accessibleName,
+  fontSize,
 }: {
   n: { x: number; y: number; w: number; h: number };
   label: string;
   interactive: boolean;
   onFocusDetail?: string;
+  /**
+   * What assistive tech and the hover tooltip announce, when that differs from
+   * what is drawn. A department node draws its number and announces its name.
+   */
+  accessibleName?: string;
+  fontSize?: string;
 }) {
+  const name = accessibleName ?? label;
   const content = (
     <>
       <rect
@@ -107,7 +121,7 @@ function NodeBox({
       <foreignObject x={n.x} y={n.y} width={n.w} height={n.h}>
         <div
           className="w-full h-full flex items-center justify-center text-center px-1 leading-tight"
-          style={{ fontSize: n.h > 45 ? "11px" : "9px", color: "var(--ink)" }}
+          style={{ fontSize: fontSize ?? (n.h > 45 ? "11px" : "9px"), color: "var(--ink)" }}
         >
           {label}
         </div>
@@ -118,8 +132,8 @@ function NodeBox({
   if (!interactive) return content;
 
   return (
-    <g role="button" tabIndex={0} aria-label={`${label}. ${onFocusDetail ?? ""}`} className="diagram-node-interactive">
-      <title>{`${label}${onFocusDetail ? ` — ${onFocusDetail}` : ""}`}</title>
+    <g role="button" tabIndex={0} aria-label={`${name}. ${onFocusDetail ?? ""}`} className="diagram-node-interactive">
+      <title>{`${name}${onFocusDetail ? ` — ${onFocusDetail}` : ""}`}</title>
       {content}
     </g>
   );
@@ -145,6 +159,13 @@ export async function StructureDiagram({
 
   const isFull = variant === "full";
   const deptLabels = await departmentLabels(locale, tLeaders("departmentHead"));
+
+  // The compact variant on the home page is a teaser with no legend under it,
+  // so numbering there would be a key with nothing to unlock. It draws the
+  // department row as plain boxes — the shape of the organisation — and the
+  // svg's own aria-label carries the description. The full diagram on
+  // /structure is where the numbers and the legend belong.
+  const deptNodeLabel = (i: number) => (isFull ? String(i + 1) : "");
 
   // --- Desktop (row) layout, viewBox 1000x520 ---
   const W = 1000;
@@ -193,7 +214,15 @@ export async function StructureDiagram({
             <NodeBox key={n.id} n={n} label={seniorLabels[i]} interactive={isFull} onFocusDetail={detailFor.vp} />
           ))}
           {deptRow.map((n, i) => (
-            <NodeBox key={n.id} n={n} label={deptLabels[i]} interactive={isFull} onFocusDetail={detailFor.dept} />
+            <NodeBox
+              key={n.id}
+              n={n}
+              label={deptNodeLabel(i)}
+              accessibleName={`${i + 1}. ${deptLabels[i]}`}
+              fontSize="15px"
+              interactive={isFull}
+              onFocusDetail={detailFor.dept}
+            />
           ))}
         </svg>
 
@@ -209,8 +238,36 @@ export async function StructureDiagram({
           detailFor={detailFor}
         />
       </div>
+      {isFull && <DepartmentLegend labels={deptLabels} heading={t("departmentsHeading")} />}
       {isFull && <figcaption className="eyebrow mt-4">{t("diagramCaption")}</figcaption>}
     </figure>
+  );
+}
+
+/**
+ * The key to the numbered department nodes.
+ *
+ * Plain HTML rather than SVG text, so the names reflow, scale with the user's
+ * font size, stay selectable, and wrap properly in Amharic. The heading uses
+ * Structure.departmentsHeading, which already exists in all three locales.
+ *
+ * `aria-hidden` because every node already announces its own full name — a
+ * screen reader reading the chart and then the identical list again would just
+ * be repetition. Sighted readers are the ones who need the mapping.
+ */
+function DepartmentLegend({ labels, heading }: { labels: string[]; heading: string }) {
+  return (
+    <div className="mt-6" aria-hidden="true">
+      <p className="eyebrow mb-3">{heading}</p>
+      <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1.5 text-sm">
+        {labels.map((label, i) => (
+          <li key={i} className="flex gap-2 items-baseline">
+            <span className="text-2xs text-muted tabular-nums w-5 shrink-0 text-right">{i + 1}</span>
+            <span className="measure">{label}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 
@@ -246,7 +303,15 @@ function MobileDiagram({
         <NodeBox key={n.id} n={n} label={labels.senior[i]} interactive={isFull} onFocusDetail={detailFor.vp} />
       ))}
       {deptGrid.map((n, i) => (
-        <NodeBox key={n.id} n={n} label={labels.dept[i]} interactive={isFull} onFocusDetail={detailFor.dept} />
+        <NodeBox
+          key={n.id}
+          n={n}
+          label={isFull ? String(i + 1) : ""}
+          accessibleName={`${i + 1}. ${labels.dept[i]}`}
+          fontSize="15px"
+          interactive={isFull}
+          onFocusDetail={detailFor.dept}
+        />
       ))}
     </svg>
   );

@@ -198,10 +198,11 @@ Empty by design, ready for the organization to fill from `/admin`:
 
 - Mission and vision statements (stored as `null`, not placeholder prose)
 - Bylaws summary
-- Department names — the 13 structure-diagram nodes show a generic
-  "Department Head" label until each department is named. **Naming one is just
-  renaming that leader slot's role title in the admin panel** (slots 5-17), in
-  all three languages; the diagram reads them from there. No separate field.
+- Department names — the structure diagram numbers its 13 department nodes and
+  lists the names in a legend beneath. Until a department is named, its legend
+  entry reads the generic "Department Head". **Naming one is just renaming that
+  leader slot's role title in the admin panel** (slots 5-17), in all three
+  languages; the diagram reads them from there. No separate field.
 - All work items — the categories exist, the contents do not
 - All reports and resources
 - 17 leader profiles (names, photos, biographies)
@@ -222,6 +223,7 @@ obligations. These controls are what make a public leaders page defensible.
 
 | Control | Implementation |
 |---|---|
+| Role title is not consent-gated (by design) | A role title names a *position*, so it publishes without a consent check — it appears on the structure diagram and home page on save. Because the field sits beside the name field in the same form, the admin form warns in place: **position name only, never a person's name.** Say this first when training editors. |
 | Guardian consent gate | A leader profile **cannot be published** without recorded consent — enforced in the server action, not the UI. Superuser only. **Consent is also required at every point the profile is read**: the public leaders page, search, the leader photo route and the media route each check it independently, so a profile can never be visible with consent withdrawn regardless of how `status` was set. |
 | Withdrawing consent | Revoking consent unpublishes the profile in the same write and rebuilds the public page immediately. It does not wait for someone to remember to press Unpublish. |
 | Erasing a profile | Superuser only. Clears name, biographies, photograph and recorded consent, and deletes the photo from storage. The position and its place in the structure remain, so the slot is left empty for the next holder. This is the answer to a guardian asking for the data to be removed rather than hidden. |
@@ -314,6 +316,10 @@ deploy.
   panel appeared on `/structure` AND on the home page, in the right language,
   immediately — and unnamed slots still fall back to the translated generic
   label in all three locales
+- Structure diagram rendered and inspected with six realistically long
+  trilingual department names at 1280px and at 320px, in Amharic and English.
+  The legend stays legible in Ethiopic at both widths and name length no longer
+  constrains the layout.
 - `sharp`'s native binary confirmed present in the built artifact
 - Migrations applied and seed script run against a real Postgres instance
 - The consent gate driven through every state against a running build: only

@@ -48,11 +48,19 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
         </div>
 
         <div>
-          <p className="text-sm font-medium mb-2">Role title</p>
+          <p className="text-sm font-medium mb-1">Role title</p>
+          <p className="text-xs text-amber-800 mb-2 max-w-prose">
+            <strong>Position name only — never a person&rsquo;s name.</strong> This field is
+            published on the structure diagram and the home page as soon as it is saved, and
+            it is deliberately <em>not</em> covered by the guardian-consent gate, because a
+            position name is not personal data. Writing a name here would put that name in
+            public with no consent check. Use &ldquo;Climate Action&rdquo;, not &ldquo;Climate
+            Action &mdash; Abebe&rdquo;.
+          </p>
           <LocaleTabs
             en={<input name="roleTitleEn" defaultValue={leader.roleTitleEn ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
             am={<input name="roleTitleAm" defaultValue={leader.roleTitleAm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" lang="am" />}
-            om={<input name="roleTitleOm" defaultValue={leader.roleTitleOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
+            om={<input name="roleTitleOm" defaultValue={leader.roleTitleOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" lang="om" />}
           />
         </div>
 
@@ -61,7 +69,7 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
           <LocaleTabs
             en={<RichTextEditor name="bioEn" defaultValue={leader.bioEn ?? ""} />}
             am={<RichTextEditor name="bioAm" defaultValue={leader.bioAm ?? ""} lang="am" />}
-            om={<RichTextEditor name="bioOm" defaultValue={leader.bioOm ?? ""} />}
+            om={<RichTextEditor name="bioOm" defaultValue={leader.bioOm ?? ""} lang="om" />}
           />
         </div>
 
