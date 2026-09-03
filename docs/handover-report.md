@@ -223,6 +223,7 @@ obligations. These controls are what make a public leaders page defensible.
 
 | Control | Implementation |
 |---|---|
+| Diagram states the governance accurately | The department connectors originate from the senior row collectively, matching this page's own copy ("...a Secretary, above thirteen department heads"). They previously started at the middle senior box, which drew all thirteen departments as reporting to the second Vice President. **If the bylaws say departments report to the President alone, or to one named officer, this needs changing again** — the diagram is read literally by the officials it is meant to convince. |
 | Role title is not consent-gated (by design) | A role title names a *position*, so it publishes without a consent check — it appears on the structure diagram and home page on save. Because the field sits beside the name field in the same form, the admin form warns in place: **position name only, never a person's name.** Say this first when training editors. |
 | Guardian consent gate | A leader profile **cannot be published** without recorded consent — enforced in the server action, not the UI. Superuser only. **Consent is also required at every point the profile is read**: the public leaders page, search, the leader photo route and the media route each check it independently, so a profile can never be visible with consent withdrawn regardless of how `status` was set. |
 | Withdrawing consent | Revoking consent unpublishes the profile in the same write and rebuilds the public page immediately. It does not wait for someone to remember to press Unpublish. |
@@ -317,9 +318,10 @@ deploy.
   immediately — and unnamed slots still fall back to the translated generic
   label in all three locales
 - Structure diagram rendered and inspected with six realistically long
-  trilingual department names at 1280px and at 320px, in Amharic and English.
-  The legend stays legible in Ethiopic at both widths and name length no longer
-  constrains the layout.
+  trilingual department names at 1280px, 1024px and 320px, in Amharic and
+  English. The legend stays legible in Ethiopic at every width, name length no
+  longer constrains the layout, the svg fits its container exactly at all three
+  widths, and the department bus now originates from the senior row as a whole.
 - `sharp`'s native binary confirmed present in the built artifact
 - Migrations applied and seed script run against a real Postgres instance
 - The consent gate driven through every state against a running build: only
