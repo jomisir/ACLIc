@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the example must be tracked: both README.md and deploy.md tell you to
+# `cp .env.example .env`, which fails for anyone cloning if it is ignored.
+# It holds placeholders only — never put a real value in it.
+!.env.example
 
 # vercel
 .vercel

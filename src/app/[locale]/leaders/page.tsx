@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { leaders } from "@/db/schema";
 import { pageMetadata } from "@/lib/metadata";
+import { RichText } from "@/components/RichText";
 import type { Locale } from "@/i18n/routing";
 
 const titleCol = { en: "roleTitleEn", am: "roleTitleAm", om: "roleTitleOm" } as const;
@@ -24,10 +25,13 @@ export default async function LeadersPage({ params }: { params: Promise<{ locale
   const t = await getTranslations({ locale, namespace: "Leaders" });
   const tCommon = await getTranslations({ locale, namespace: "Common" });
 
+  // Consent is required here as well as at publish time: a profile must never
+  // be visible with consent withdrawn, whatever route set `status`.
+  // See setGuardianConsent in src/actions/leaders.ts.
   const rows = await db
     .select()
     .from(leaders)
-    .where(eq(leaders.status, "published"))
+    .where(and(eq(leaders.status, "published"), eq(leaders.guardianConsent, true)))
     .orderBy(asc(leaders.displayOrder));
 
   return (
@@ -65,7 +69,7 @@ export default async function LeadersPage({ params }: { params: Promise<{ locale
                   <div className="mt-4 pt-4 border-t border-gold/20 text-sm text-muted text-left">
                     {fellBack && <p className="text-2xs mb-2">{tCommon("availableInEnglish")}</p>}
                     <p className="font-medium text-ink mb-1">{t("bioHeading")}</p>
-                    <p>{bio || "—"}</p>
+                    {bio ? <RichText html={bio} /> : <p>—</p>}
                   </div>
                 </details>
               </li>

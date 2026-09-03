@@ -158,3 +158,102 @@ h1, h2, h3, h4 {
     scroll-behavior: auto !important;
   }
 }
+
+/* --- Rich text --------------------------------------------------------
+   Shared by the admin editor (.prose-admin) and the public site (.prose-content).
+   Only the tags the sanitizer allows are styled; anything else can't reach
+   the page. Kept to the site's own type scale rather than pulling in a
+   typography plugin. */
+.prose-admin > * + *,
+.prose-content > * + * {
+  margin-top: 1em;
+}
+
+.prose-content {
+  max-width: 68ch;
+}
+
+.prose-admin h2,
+.prose-content h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  letter-spacing: -0.02em;
+}
+
+.prose-admin h3,
+.prose-content h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  letter-spacing: -0.02em;
+}
+
+.prose-admin h4,
+.prose-content h4 {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.prose-admin ul,
+.prose-content ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+
+.prose-admin ol,
+.prose-content ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+
+.prose-admin li + li,
+.prose-content li + li {
+  margin-top: 0.25em;
+}
+
+.prose-admin blockquote,
+.prose-content blockquote {
+  border-left: 2px solid var(--gold);
+  padding-left: 1em;
+  color: var(--muted);
+}
+
+.prose-content a {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-content a:hover {
+  color: var(--gold-deep);
+}
+
+.prose-admin a {
+  color: #2e6b52;
+  text-decoration: underline;
+}
+
+.prose-admin hr,
+.prose-content hr {
+  border: 0;
+  border-top: 1px solid var(--gold);
+  opacity: 0.4;
+}
+
+.prose-admin code,
+.prose-content code {
+  font-size: 0.9em;
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+/* Tiptap renders an empty paragraph when there is no content; show a hint
+   rather than a blank box the editor might think is broken. */
+.prose-admin p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

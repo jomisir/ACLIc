@@ -9,12 +9,13 @@
     "membership": "ACLIC Waliin Ta'aa",
     "resources": "Gabaasaa fi Qabeenya",
     "contact": "Nu Quunnamaa",
-    "skipToContent": "Gara Qabiyyeetti Utaali"
+    "skipToContent": "Gara Qabiyyeetti Utaali",
+    "search": "Barbaacha"
   },
   "Common": {
     "readMore": "Dabalata Dubbisi",
     "close": "Cufi",
-    "menu": "Menu",
+    "menu": "Baafata",
     "language": "Afaan",
     "theme": "Bifa",
     "lightMode": "Bifa Ifaa",
@@ -89,7 +90,7 @@
       "advocacy": "Dhiyeessii Falmii",
       "partnership": "Michoomaa"
     },
-    "emptyState": "Odeeffannoon kutaa kanaa yeroo ifatti baafamuuf hayyamamu maxxanfama.",
+    "emptyState": "Odeeffannoon gosa kanaa yeroo ifatti baafamuuf hayyamamu maxxanfama.",
     "metaDescription": "Leenjiiwwan, ololawwan, walgahii Wal-ga'ii Waliigalaa, dhiyeessii falmii, fi hojii michoomaa — akkaataa gosaatiin ijaaraman."
   },
   "Partners": {
@@ -165,5 +166,22 @@
     "heading": "Karaa keenyaan rakkoon uumameera",
     "body": "Maaloo yeroo xiqqoo booda irra deebi'ii yaali. Kun yoo itti fufe, fuula nu quunnamaa keessaan nu beeksisi.",
     "cta": "Gara Fuula Jalqabaatti Deebi'i"
+  },
+  "Search": {
+    "eyebrow": "Barbaacha",
+    "heading": "Marsariitii Kana Keessa Barbaadi",
+    "inputLabel": "Jechoota Barbaachaa",
+    "placeholder": "Hoggantoota, hojii, qabeenya barbaadi…",
+    "submit": "Barbaadi",
+    "tooShort": "Barbaaduuf yoo xiqqaate qubee lama galchi.",
+    "noResults": "“{query}” irratti homaa hin argamne. Jecha biraa yaali, ykn kutaalee menu keessa jiran ilaali.",
+    "resultCount": "{count, plural, one {bu'aa #} other {bu'aawwan #}}",
+    "metaDescription": "Hoggantoota, hojii, qabeenyaa fi fuulawwan ACLIC maxxanfaman barbaadi.",
+    "kinds": {
+      "leader": "Hooggana",
+      "work": "Waan Nu Hojjennu",
+      "resource": "Qabeenya",
+      "page": "Fuula"
+    }
   }
 }

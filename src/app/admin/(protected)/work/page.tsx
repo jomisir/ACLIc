@@ -1,8 +1,11 @@
 import { desc } from "drizzle-orm";
+import Link from "next/link";
 import { db } from "@/db";
 import { workItems } from "@/db/schema";
 import { auth } from "@/auth";
 import { createWorkItem, publishWorkItem, unpublishWorkItem, deleteWorkItem } from "@/actions/work-items";
+import { LocaleTabs } from "@/components/admin/LocaleTabs";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 const categories = [
   ["training", "Trainings"],
@@ -11,6 +14,8 @@ const categories = [
   ["advocacy", "Advocacy submissions"],
   ["partnership", "Partnerships"],
 ] as const;
+
+const inputClass = "w-full border border-[#c8a24a]/40 rounded px-3 py-2";
 
 export default async function AdminWorkPage() {
   const rows = await db.select().from(workItems).orderBy(desc(workItems.updatedAt));
@@ -28,8 +33,25 @@ export default async function AdminWorkPage() {
             <option key={v} value={v}>{l}</option>
           ))}
         </select>
-        <input name="titleEn" placeholder="Title (English)" className="border border-[#c8a24a]/40 rounded px-3 py-2" />
-        <textarea name="summaryEn" placeholder="Short summary (English)" rows={3} className="border border-[#c8a24a]/40 rounded px-3 py-2" />
+
+        <div>
+          <p className="text-sm font-medium mb-2">Title</p>
+          <LocaleTabs
+            en={<input name="titleEn" className={inputClass} />}
+            am={<input name="titleAm" className={inputClass} lang="am" />}
+            om={<input name="titleOm" className={inputClass} lang="om" />}
+          />
+        </div>
+
+        <div>
+          <p className="text-sm font-medium mb-2">Short summary</p>
+          <LocaleTabs
+            en={<RichTextEditor name="summaryEn" defaultValue="" />}
+            am={<RichTextEditor name="summaryAm" defaultValue="" lang="am" />}
+            om={<RichTextEditor name="summaryOm" defaultValue="" lang="om" />}
+          />
+        </div>
+
         <input name="occurredOn" type="date" className="border border-[#c8a24a]/40 rounded px-3 py-2 w-fit" />
         <select name="visibility" className="border border-[#c8a24a]/40 rounded px-3 py-2 w-fit">
           <option value="internal">Internal</option>
@@ -48,6 +70,7 @@ export default async function AdminWorkPage() {
             </div>
             <div className="flex items-center gap-3 text-xs">
               <span className={w.status === "published" ? "text-[#2e6b52]" : "text-[#5a5e67]"}>{w.status}</span>
+              <Link href={`/admin/work/${w.id}`} className="underline">Edit</Link>
               {isSuperuser && (
                 <>
                   {w.status === "draft" ? (

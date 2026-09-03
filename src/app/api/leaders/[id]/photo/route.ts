@@ -11,7 +11,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   if (!row || !row.photoPath) return new NextResponse("Not found", { status: 404 });
 
   const session = await auth();
-  if (row.status !== "published" && !session?.user) {
+  // A child's photograph is served only while the profile is published AND
+  // guardian consent stands. Signed-in staff can still see drafts for review.
+  const publiclyVisible = row.status === "published" && row.guardianConsent;
+  if (!publiclyVisible && !session?.user) {
     return new NextResponse("Not found", { status: 404 });
   }
 

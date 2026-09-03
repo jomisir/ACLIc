@@ -4,6 +4,7 @@ import { auth, signOut } from "@/auth";
 
 const links: { href: string; label: string; superuserOnly?: boolean }[] = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/pages", label: "Pages" },
   { href: "/admin/leaders", label: "Leaders" },
   { href: "/admin/partners", label: "Partners" },

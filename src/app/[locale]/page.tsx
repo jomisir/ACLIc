@@ -7,6 +7,7 @@ import { ImageSlot } from "@/components/ImageSlot";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { getMissionVision } from "@/lib/content";
 import { pageMetadata } from "@/lib/metadata";
+import { RichText } from "@/components/RichText";
 import { db } from "@/db";
 import { partners, workItems } from "@/db/schema";
 import { sql } from "drizzle-orm";
@@ -86,11 +87,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <section className="mx-auto max-w-[1180px] px-6 py-12 border-t border-gold/20 grid md:grid-cols-2 gap-8">
         <div>
           <h2 className="text-2xl mb-3">{t("missionHeading")}</h2>
-          <p className="measure text-muted">{mission.value ?? t("missionEmpty")}</p>
+          {mission.value ? (
+            <RichText html={mission.value} className="text-muted" />
+          ) : (
+            <p className="measure text-muted">{t("missionEmpty")}</p>
+          )}
         </div>
         <div>
           <h2 className="text-2xl mb-3">{t("visionHeading")}</h2>
-          <p className="measure text-muted">{vision.value ?? t("visionEmpty")}</p>
+          {vision.value ? (
+            <RichText html={vision.value} className="text-muted" />
+          ) : (
+            <p className="measure text-muted">{t("visionEmpty")}</p>
+          )}
         </div>
       </section>
 

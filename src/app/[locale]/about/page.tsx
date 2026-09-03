@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ImageSlot } from "@/components/ImageSlot";
 import { getMissionVision, getPublishedPageBody } from "@/lib/content";
 import { pageMetadata } from "@/lib/metadata";
+import { RichText } from "@/components/RichText";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -42,7 +43,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           {body?.body && (
             <div className="measure mt-8 pt-8 border-t border-gold/20">
               {body.fellBack && <p className="text-2xs text-muted mb-2">{tCommon("availableInEnglish")}</p>}
-              <p className="whitespace-pre-line">{body.body}</p>
+              <RichText html={body.body} />
             </div>
           )}
         </section>
@@ -56,11 +57,19 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       <div className="grid md:grid-cols-2 gap-8 pt-8 border-t border-gold/20">
         <div>
           <h2 className="text-xl mb-2">{t("missionHeading")}</h2>
-          <p className="measure text-muted">{mission.value ?? tHome("missionEmpty")}</p>
+          {mission.value ? (
+            <RichText html={mission.value} className="text-muted" />
+          ) : (
+            <p className="measure text-muted">{tHome("missionEmpty")}</p>
+          )}
         </div>
         <div>
           <h2 className="text-xl mb-2">{t("visionHeading")}</h2>
-          <p className="measure text-muted">{vision.value ?? tHome("visionEmpty")}</p>
+          {vision.value ? (
+            <RichText html={vision.value} className="text-muted" />
+          ) : (
+            <p className="measure text-muted">{tHome("visionEmpty")}</p>
+          )}
         </div>
       </div>
     </main>

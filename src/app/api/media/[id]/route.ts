@@ -23,12 +23,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     return serve(row.filePath);
   }
 
+  // Consent as well as publication — this route can otherwise hand out a
+  // child's photograph after a guardian has withdrawn consent.
   const [leaderMatch] = await db
-    .select({ status: leaders.status })
+    .select({ status: leaders.status, guardianConsent: leaders.guardianConsent })
     .from(leaders)
     .where(eq(leaders.photoPath, row.filePath))
     .limit(1);
-  if (leaderMatch?.status === "published") return serve(row.filePath);
+  if (leaderMatch?.status === "published" && leaderMatch.guardianConsent) {
+    return serve(row.filePath);
+  }
 
   const [partnerMatch] = await db
     .select({ status: partners.status })

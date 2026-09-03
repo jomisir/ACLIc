@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { isRateLimited } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/client-ip";
 import { writeAudit } from "./audit";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -28,8 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           .toLowerCase();
         const password = String(credentials?.password ?? "");
 
-        const ip =
-          request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+        const ip = clientIp(request.headers);
 
         if (await isRateLimited("login", ip, 5, 15)) {
           await writeAudit({ userId: null, action: "login_blocked", objectType: "user", objectId: email, ip });

@@ -4,6 +4,9 @@ import { imageSlots } from "@/db/schema";
 import { IMAGE_SLOTS } from "@/lib/image-slots-config";
 import { uploadImageSlot, setImageSlotCaption } from "@/actions/image-slots";
 import { PhotoUploader as ImageSlotUploader } from "./PhotoUploader";
+import { LocaleTabs } from "./LocaleTabs";
+
+const captionClass = "w-full text-xs border border-[#c8a24a]/40 rounded px-2 py-1";
 
 export async function ImageSlotManager({ pageSlug }: { pageSlug: string }) {
   const slots = IMAGE_SLOTS[pageSlug] ?? [];
@@ -36,7 +39,11 @@ async function SlotRow({ pageSlug, slotKey }: { pageSlug: string; slotKey: strin
       <p className="text-xs uppercase tracking-wide text-[#5a5e67] mb-2">{slotKey}</p>
       <ImageSlotUploader currentPath={existing?.mediaId ?? null} onUpload={boundUpload} />
       <form action={boundCaption} className="mt-2 flex flex-col gap-1">
-        <input name="captionEn" defaultValue={existing?.captionEn ?? ""} placeholder="Caption (English)" className="text-xs border border-[#c8a24a]/40 rounded px-2 py-1" />
+        <LocaleTabs
+          en={<input name="captionEn" defaultValue={existing?.captionEn ?? ""} className={captionClass} />}
+          am={<input name="captionAm" defaultValue={existing?.captionAm ?? ""} lang="am" className={captionClass} />}
+          om={<input name="captionOm" defaultValue={existing?.captionOm ?? ""} lang="om" className={captionClass} />}
+        />
         <button type="submit" className="text-xs underline self-start">Save caption</button>
       </form>
     </div>

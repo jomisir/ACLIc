@@ -8,9 +8,11 @@ import {
   publishLeader,
   unpublishLeader,
   setGuardianConsent,
+  clearLeaderProfile,
   uploadLeaderPhoto,
 } from "@/actions/leaders";
 import { LocaleTabs } from "@/components/admin/LocaleTabs";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { PhotoUploader } from "@/components/admin/PhotoUploader";
 
 export default async function EditLeaderPage({ params }: { params: Promise<{ id: string }> }) {
@@ -46,20 +48,28 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
         </div>
 
         <div>
-          <p className="text-sm font-medium mb-2">Role title</p>
+          <p className="text-sm font-medium mb-1">Role title</p>
+          <p className="text-xs text-amber-800 mb-2 max-w-prose">
+            <strong>Position name only — never a person&rsquo;s name.</strong> This field is
+            published on the structure diagram and the home page as soon as it is saved, and
+            it is deliberately <em>not</em> covered by the guardian-consent gate, because a
+            position name is not personal data. Writing a name here would put that name in
+            public with no consent check. Use &ldquo;Climate Action&rdquo;, not &ldquo;Climate
+            Action &mdash; Abebe&rdquo;.
+          </p>
           <LocaleTabs
             en={<input name="roleTitleEn" defaultValue={leader.roleTitleEn ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
             am={<input name="roleTitleAm" defaultValue={leader.roleTitleAm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" lang="am" />}
-            om={<input name="roleTitleOm" defaultValue={leader.roleTitleOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
+            om={<input name="roleTitleOm" defaultValue={leader.roleTitleOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" lang="om" />}
           />
         </div>
 
         <div>
           <p className="text-sm font-medium mb-2">Biography</p>
           <LocaleTabs
-            en={<textarea name="bioEn" rows={6} defaultValue={leader.bioEn ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
-            am={<textarea name="bioAm" rows={6} defaultValue={leader.bioAm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" lang="am" />}
-            om={<textarea name="bioOm" rows={6} defaultValue={leader.bioOm ?? ""} className="w-full border border-[#c8a24a]/40 rounded px-3 py-2" />}
+            en={<RichTextEditor name="bioEn" defaultValue={leader.bioEn ?? ""} />}
+            am={<RichTextEditor name="bioAm" defaultValue={leader.bioAm ?? ""} lang="am" />}
+            om={<RichTextEditor name="bioOm" defaultValue={leader.bioOm ?? ""} lang="om" />}
           />
         </div>
 
@@ -79,6 +89,11 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
               {leader.guardianConsent ? "Revoke consent" : "Record consent"}
             </button>
           </form>
+          {leader.guardianConsent && (
+            <p className="text-xs text-[#5a5e67] mt-2">
+              Revoking consent also unpublishes this profile immediately.
+            </p>
+          )}
 
           <div className="flex gap-3 mt-6">
             {leader.status === "draft" ? (
@@ -95,6 +110,22 @@ export default async function EditLeaderPage({ params }: { params: Promise<{ id:
               </form>
             )}
           </div>
+          <div className="mt-8 border-t border-[#c8a24a]/30 pt-5">
+            <h3 className="text-sm font-medium mb-1">Erase this profile</h3>
+            <p className="text-xs text-[#5a5e67] mb-3 max-w-prose">
+              Removes the name, biographies, photograph and recorded consent, and deletes
+              the photo file from storage. The position and its place in the structure stay,
+              so the slot is left empty and unpublished for whoever holds the role next.
+              Use this when a guardian asks for the data to be removed rather than hidden —
+              it cannot be undone.
+            </p>
+            <form action={clearLeaderProfile.bind(null, leader.id)}>
+              <button type="submit" className="text-sm border border-red-700 text-red-700 rounded px-3 py-1.5">
+                Erase profile data
+              </button>
+            </form>
+          </div>
+
           {!leader.guardianConsent && leader.status === "draft" && (
             <p className="text-xs text-amber-700 mt-2">Publishing is blocked until guardian consent is recorded.</p>
           )}

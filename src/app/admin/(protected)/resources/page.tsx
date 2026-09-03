@@ -1,8 +1,12 @@
 import { desc } from "drizzle-orm";
+import Link from "next/link";
 import { db } from "@/db";
 import { resources } from "@/db/schema";
 import { auth } from "@/auth";
 import { uploadResource, publishResource, unpublishResource, deleteResource } from "@/actions/resources";
+import { LocaleTabs } from "@/components/admin/LocaleTabs";
+
+const inputClass = "w-full border border-[#c8a24a]/40 rounded px-3 py-2";
 
 export default async function AdminResourcesPage() {
   const rows = await db.select().from(resources).orderBy(desc(resources.createdAt));
@@ -15,7 +19,18 @@ export default async function AdminResourcesPage() {
       <p className="text-sm text-[#5a5e67] mb-6">Nothing is public until a superuser publishes it.</p>
 
       <form action={uploadResource} className="border border-[#c8a24a]/30 rounded p-4 mb-8 flex flex-col gap-4">
-        <input name="titleEn" placeholder="Title (English)" required className="border border-[#c8a24a]/40 rounded px-3 py-2" />
+        <div>
+          {/* No `required` on titleEn: it lives inside a tab panel that is
+              display:none whenever another locale is selected, and a browser
+              cannot focus a hidden invalid control — it just refuses to submit
+              with no visible message. uploadResource enforces it server-side. */}
+          <p className="text-sm font-medium mb-2">Title (English required)</p>
+          <LocaleTabs
+            en={<input name="titleEn" className={inputClass} />}
+            am={<input name="titleAm" className={inputClass} lang="am" />}
+            om={<input name="titleOm" className={inputClass} lang="om" />}
+          />
+        </div>
         <input name="file" type="file" required />
         <select name="visibility" className="border border-[#c8a24a]/40 rounded px-3 py-2 w-fit">
           <option value="internal">Internal</option>
@@ -27,9 +42,10 @@ export default async function AdminResourcesPage() {
       <ul className="border border-[#c8a24a]/30 rounded divide-y divide-[#c8a24a]/20">
         {rows.map((r) => (
           <li key={r.id} className="flex items-center justify-between px-4 py-3 gap-4">
-            <span className="text-sm">{r.titleEn} <span className="text-xs text-[#5a5e67] ml-2">{r.visibility}</span></span>
+            <span className="text-sm">{r.titleEn || "(untitled)"} <span className="text-xs text-[#5a5e67] ml-2">{r.visibility}</span></span>
             <div className="flex items-center gap-3 text-xs">
               <span className={r.status === "published" ? "text-[#2e6b52]" : "text-[#5a5e67]"}>{r.status}</span>
+              <Link href={`/admin/resources/${r.id}`} className="underline">Edit</Link>
               {isSuperuser && (
                 <>
                   {r.status === "draft" ? (
