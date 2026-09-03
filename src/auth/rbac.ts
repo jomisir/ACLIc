@@ -1,5 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
+import { clientIp } from "@/lib/client-ip";
 import { auth } from "@/auth";
 
 export type Role = "superuser" | "user";
@@ -36,6 +37,5 @@ export async function requireRole(...allowed: Role[]) {
 }
 
 export async function requestIp(): Promise<string> {
-  const h = await headers();
-  return h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  return clientIp(await headers());
 }

@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { subscribers } from "@/db/schema";
 import { isRateLimited } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/client-ip";
 import { sendMail } from "@/lib/mail";
 
 const schema = z.object({
@@ -44,7 +45,7 @@ export async function subscribeToNewsletter(
     return { status: "success" };
   }
 
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = clientIp(await headers());
   if (await isRateLimited("newsletter_signup", ip, 5, 15)) {
     return { status: "error", message: "Too many attempts. Please try again later." };
   }

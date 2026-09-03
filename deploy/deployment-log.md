@@ -118,8 +118,34 @@ Result will be recorded here verbatim.
 
 ---
 
+### Blocked ON Gate 0 — client IP for rate limiting
+
+⏳ **Must be fixed before the site is publicly reachable.**
+
+`src/lib/client-ip.ts` trusts the leftmost `x-forwarded-for` entry, which the
+client controls. Depending on how Yegara's LiteSpeed handles the header, that
+means either an attacker can defeat the login rate limit entirely (fresh bucket
+per request), or every visitor shares one bucket and five failed logins lock
+out the whole admin panel.
+
+The `/diag` result tells us which. What to look for in the JSON and in a manual
+`curl -H 'X-Forwarded-For: 1.2.3.4'` against the app:
+
+| Observation | Meaning | Fix |
+|---|---|---|
+| Header arrives with the real client IP appended after the injected one | Host appends; N proxies in front | Take the Nth entry from the right |
+| Header arrives containing only the injected value | Host passes the client's header through untouched | Ignore `x-forwarded-for`; use a host-set header |
+| Header absent entirely | No proxy header at all | Use the socket address, or a host-set header |
+
+The derivation lives in one function so this is a one-line change.
+
 ### Phase 1 — Neon
 ⬜ Not started. Blocked on Gate 0 and on the connection string.
+
+Note for when this happens: use a **separate throwaway Neon project** for the
+consent-gate test, not a branch of the production database — a branch would
+carry real leader data. A throwaway connection string is safe to share; a
+production one is a credential with every child's record behind it.
 
 ### Phase 2 — CI
 ⬜ Not started. Blocked on repository secrets.

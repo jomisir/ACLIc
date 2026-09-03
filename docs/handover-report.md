@@ -198,6 +198,10 @@ Empty by design, ready for the organization to fill from `/admin`:
 
 - Mission and vision statements (stored as `null`, not placeholder prose)
 - Bylaws summary
+- Department names — the 13 structure-diagram nodes show a generic
+  "Department Head" label until each department is named. **Naming one is just
+  renaming that leader slot's role title in the admin panel** (slots 5-17), in
+  all three languages; the diagram reads them from there. No separate field.
 - All work items — the categories exist, the contents do not
 - All reports and resources
 - 17 leader profiles (names, photos, biographies)
@@ -231,7 +235,7 @@ obligations. These controls are what make a public leaders page defensible.
 | Passwords | argon2, 12-character minimum, forced change on first login |
 | Sessions | 12-hour idle expiry; HttpOnly, SameSite=Strict, Secure |
 | Rate limiting | Postgres-backed, 5 attempts / 15 min / IP on login and newsletter |
-| Audit log | Actor, action, object, IP and timestamp on every create/update/publish/delete |
+| Audit log | Actor, action, object, IP and timestamp on every create/update/publish/delete. Actor, action, object and timestamp are kept indefinitely; **IP addresses are nulled after 90 days** (`AUDIT_IP_RETENTION_DAYS`). The administrators here are children, and holding a minor's IP and activity timestamps forever exceeds what the accountability purpose needs. |
 | Admin indexing | `X-Robots-Tag: noindex` plus `robots.txt` exclusion |
 
 ---
@@ -267,6 +271,31 @@ deploy.
    100. The build is structured for it (server-rendered, minimal JS, semantic
    markup, focus rings, skip link, alt text), but the score is unmeasured.
 
+7. **The client IP used for rate limiting is not trustworthy yet.** ⚠ This one
+   is a defect with a known fix, not merely an unmeasured thing — it must be
+   resolved before the site is publicly reachable.
+
+   `src/lib/client-ip.ts` reads the leftmost `x-forwarded-for` entry, which is
+   whatever the client sent. Two failure modes, and which applies depends on
+   the host:
+
+   - If the host **appends** to the header rather than replacing it, an
+     attacker sends a random value per request, gets a fresh bucket each time,
+     and the 5-per-15-minutes login limit stops limiting anything.
+   - If the host **sets no such header**, every visitor resolves to `"unknown"`
+     and shares one bucket. Five failed logins from anywhere then lock every
+     administrator out for fifteen minutes — a trivial denial of service
+     against the whole organization.
+
+   The fix depends on how many proxies LiteSpeed puts in front of the app:
+   with a known proxy count N, take the Nth entry from the *right*, or use a
+   header the host sets and the client cannot forge. **Gate 0's diagnostic is
+   what settles it.** The derivation was centralised into one function
+   specifically so this becomes a one-line change rather than three.
+
+   Affects login throttling, newsletter throttling, and the IP recorded on
+   audit rows. Nothing is deployed, so there is no exposure today.
+
 ### What *has* been verified
 
 - Full production build succeeds through the real Neon HTTP driver
@@ -281,6 +310,10 @@ deploy.
 - EXIF stripping confirmed with `exiftool` on a GPS-tagged test image
 - `pg_dump` → `pg_restore` round trip run and row counts checked
 - Message files: 143 keys × 3 locales, no drift, all valid ICU
+- Department naming driven end to end: a department renamed through the admin
+  panel appeared on `/structure` AND on the home page, in the right language,
+  immediately — and unnamed slots still fall back to the translated generic
+  label in all three locales
 - `sharp`'s native binary confirmed present in the built artifact
 - Migrations applied and seed script run against a real Postgres instance
 - The consent gate driven through every state against a running build: only

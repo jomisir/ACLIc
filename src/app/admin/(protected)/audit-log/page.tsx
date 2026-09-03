@@ -3,6 +3,7 @@ import { desc, eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { auditLog, users } from "@/db/schema";
+import { AUDIT_IP_RETENTION_DAYS } from "@/auth/audit";
 
 export default async function AdminAuditLogPage() {
   const session = await auth();
@@ -26,7 +27,12 @@ export default async function AdminAuditLogPage() {
 
   return (
     <div>
-      <h1 className="text-2xl mb-6">Audit log</h1>
+      <h1 className="text-2xl mb-1">Audit log</h1>
+      <p className="text-sm text-[#5a5e67] mb-6">
+        Who did what, to which object, and when — kept indefinitely. IP addresses are
+        removed after {AUDIT_IP_RETENTION_DAYS} days, so older rows show a blank
+        address; everything else about them is unchanged.
+      </p>
       <div className="overflow-x-auto border border-[#c8a24a]/30 rounded">
         <table className="w-full text-sm">
           <thead className="bg-[#c8a24a]/10 text-left">
@@ -45,7 +51,7 @@ export default async function AdminAuditLogPage() {
                 <td className="px-3 py-2">{r.actorEmail ?? "system"}</td>
                 <td className="px-3 py-2">{r.action}</td>
                 <td className="px-3 py-2">{r.objectType} {r.objectId}</td>
-                <td className="px-3 py-2">{r.ip}</td>
+                <td className="px-3 py-2">{r.ip ?? <span className="text-[#5a5e67]">—</span>}</td>
               </tr>
             ))}
           </tbody>

@@ -47,7 +47,12 @@ export async function saveDraftLeader(formData: FormData) {
   // public page has to be rebuilt too. Only revalidating the admin route means
   // the editor sees the fix and the public site keeps the old text until
   // someone toggles publish or the site is redeployed.
-  revalidatePath("/[locale]/leaders", "page");
+  //
+  // The whole locale subtree, not just /leaders: a slot's ROLE TITLE also
+  // labels its node in the structure diagram, which appears on the home page
+  // and on /structure. Renaming department slot #5 to "Child Protection" has
+  // to reach both of those, not only the leaders list.
+  revalidatePath("/[locale]", "layout");
 }
 
 /**
