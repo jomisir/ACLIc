@@ -45,7 +45,7 @@ async function main() {
     console.log(`Superuser ensured: ${adminEmail}`);
   } else {
     console.warn(
-      "ADMIN_EMAIL / ADMIN_PASSWORD not set — skipping superuser creation. Set them in .env and re-run.",
+      "ADMIN_EMAIL / ADMIN_PASSWORD not set — skipping superuser creation. Set them in .env.local (or .env) and re-run.",
     );
   }
 
