@@ -140,7 +140,40 @@ The `/diag` result tells us which. What to look for in the JSON and in a manual
 The derivation lives in one function so this is a one-line change.
 
 ### Phase 1 — Neon
-⬜ Not started. Blocked on Gate 0 and on the connection string.
+
+⏳ **Partially prepared. Cannot be completed from the agent session.**
+
+| Fact | Value |
+|---|---|
+| Project ID supplied by the account holder | `orange-dew-89183792` |
+| Branch named in Neon's onboarding steps | `production` |
+| Neon CLI | v4.14.1, installs fine from npm |
+| `@neon/config` | v1.3.0, installed; `neon.ts` written and typechecks |
+
+**Why the rest could not be run here.** This remote session's network policy
+blocks Neon outright — the egress gateway answers `403` to `CONNECT` for
+`console.neon.tech:443`, `oauth2.neon.tech:443` and `track.neon.tech:443`. Every
+CLI command that touches the API fails with "Could not reach the Neon API".
+`neon login` also needs an interactive browser, which this session does not
+have. Steps 1-5 and 7 have to be run by the account holder on their own machine.
+
+**Two things to settle before `neon deploy` is run.**
+
+1. `neon deploy` is an alias for `neon config apply` — it applies `neon.ts` as a
+   **declarative policy** to a branch. The onboarding steps go straight from an
+   empty `defineConfig({})` to applying it against `production`. Run
+   `neon config plan` first and read the diff; it is the documented dry run and
+   it exists precisely for this.
+2. The project's schema is owned by **drizzle-kit** (`drizzle/*.sql`, applied
+   with `npm run db:migrate` from a trusted machine or CI — see `deploy.md`).
+   If a `neon.ts` policy also manages schema, there are two sources of truth for
+   the same tables. Confirm from the plan output that it does not before
+   adopting it.
+
+**Separately: do not run the consent-gate test against this branch.** It needs a
+throwaway project seeded with dummy rows, because the test publishes and then
+revokes profiles. `production` is the branch that will hold real children's
+data.
 
 Note for when this happens: use a **separate throwaway Neon project** for the
 consent-gate test, not a branch of the production database — a branch would

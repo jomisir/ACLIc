@@ -46,3 +46,8 @@ next-env.d.ts
 
 # Uploads written by the development-only local storage driver
 .local-storage/
+
+# Local Neon CLI context written by `neon link` — machine-specific, may carry
+# project/branch identifiers. Keep it out of the repo.
+.neon
+.neon/
