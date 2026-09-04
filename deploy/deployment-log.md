@@ -141,44 +141,63 @@ The derivation lives in one function so this is a one-line change.
 
 ### Phase 1 — Neon
 
-⏳ **Partially prepared. Cannot be completed from the agent session.**
+✅ **Linked, and the policy question is settled.** Run by the account holder on
+their own Windows machine; this session cannot reach Neon (see below).
 
 | Fact | Value |
 |---|---|
-| Project ID supplied by the account holder | `orange-dew-89183792` |
-| Branch named in Neon's onboarding steps | `production` |
-| Neon CLI | v4.14.1, installs fine from npm |
-| `@neon/config` | v1.3.0, installed; `neon.ts` written and typechecks |
+| Org ID | `org-old-scene-05112698` |
+| Project ID | `orange-dew-89183792` |
+| Branch | `production` (`br-dry-paper-b23i6f24`) |
+| Neon CLI | v4.14.1 |
+| `neon.ts` policy | `defineConfig({})`, committed |
 
-**Why the rest could not be run here.** This remote session's network policy
-blocks Neon outright — the egress gateway answers `403` to `CONNECT` for
-`console.neon.tech:443`, `oauth2.neon.tech:443` and `track.neon.tech:443`. Every
-CLI command that touches the API fails with "Could not reach the Neon API".
-`neon login` also needs an interactive browser, which this session does not
-have. Steps 1-5 and 7 have to be run by the account holder on their own machine.
+**`neon config plan` output — the question that was blocking `neon deploy`:**
 
-**Two things to settle before `neon deploy` is run.**
+```
+INFO: → Planning against branch production (br-dry-paper-b23i6f24)
+INFO: No changes — branch production already matches the policy.
+Utilized services: Postgres
+```
 
-1. `neon deploy` is an alias for `neon config apply` — it applies `neon.ts` as a
-   **declarative policy** to a branch. The onboarding steps go straight from an
-   empty `defineConfig({})` to applying it against `production`. Run
-   `neon config plan` first and read the diff; it is the documented dry run and
-   it exists precisely for this.
-2. The project's schema is owned by **drizzle-kit** (`drizzle/*.sql`, applied
-   with `npm run db:migrate` from a trusted machine or CI — see `deploy.md`).
-   If a `neon.ts` policy also manages schema, there are two sources of truth for
-   the same tables. Confirm from the plan output that it does not before
-   adopting it.
+Both concerns raised before this ran are now answered:
 
-**Separately: do not run the consent-gate test against this branch.** It needs a
-throwaway project seeded with dummy rows, because the test publishes and then
-revokes profiles. `production` is the branch that will hold real children's
-data.
+1. The empty `defineConfig({})` is a **no-op** against this branch. It does not
+   remove anything. `neon deploy` is safe to run and will apply nothing.
+2. The policy does **not** manage schema — it reports Postgres as a utilized
+   service and proposes no changes. **drizzle-kit remains the single owner of
+   the schema** (`drizzle/*.sql` via `npm run db:migrate`). No second source of
+   truth was introduced.
 
-Note for when this happens: use a **separate throwaway Neon project** for the
-consent-gate test, not a branch of the production database — a branch would
-carry real leader data. A throwaway connection string is safe to share; a
-production one is a credential with every child's record behind it.
+**`neon link` wrote a real production connection string into `.env.local`**
+(`DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_BRANCH`). That file is
+gitignored, so it cannot be committed — but it means a local `npm run dev` on
+that machine now talks to the production branch. `npm run db:demo` refuses it,
+by design, because it only accepts a local host.
+
+**Not yet done on this branch:** `npm run db:migrate` (creates the tables) and
+`npm run db:seed` (bootstrap superuser). Seed also needs `ADMIN_EMAIL` and
+`ADMIN_PASSWORD`, which `neon link` does not supply.
+
+**Still to keep separate:** the consent-gate test needs its own throwaway
+project with dummy rows. It publishes and then revokes leader profiles, so it
+must not run against `production`.
+
+#### Two side commands that did not complete (neither blocks anything)
+
+- `neon skills -y` — "No coding agents detected in this project." It installs
+  agent tooling, not database configuration. `neon skills --agent claude-code`
+  would target it explicitly.
+- `neon mcp -y` — "This CLI credential cannot mint API keys. Organization and
+  project-scoped keys cannot create other keys." The key in use is org- or
+  project-scoped rather than personal. Also agent tooling, not infrastructure.
+
+#### Why this session could not run any of it
+
+The remote environment's network policy blocks Neon: the egress gateway answers
+`403` to `CONNECT` for `console.neon.tech:443`, `oauth2.neon.tech:443` and
+`track.neon.tech:443`. An API key does not help — the TLS tunnel is refused
+before any request is authenticated.
 
 ### Phase 2 — CI
 ⬜ Not started. Blocked on repository secrets.
