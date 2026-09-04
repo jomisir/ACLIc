@@ -15,7 +15,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "dev:db-proxy": "node scripts/neon-http-proxy.mjs",
+    "db:demo": "tsx src/db/demo.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

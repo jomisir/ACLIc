@@ -1,4 +1,8 @@
-import "dotenv/config";
+// Next.js reads .env.local in preference to .env; plain dotenv reads only .env.
+// Load both, .env.local winning, so `npm run db:*` and the dev server always
+// agree about which database they are pointed at.
+import dotenv from "dotenv";
+dotenv.config({ path: [".env.local", ".env"] });
 import { randomBytes } from "node:crypto";
 import argon2 from "argon2";
 import postgres from "postgres";

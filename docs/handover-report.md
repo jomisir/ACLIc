@@ -235,7 +235,7 @@ obligations. These controls are what make a public leaders page defensible.
 | One-click unpublish | Takes a profile down immediately without deleting the record |
 | Analytics | Daily aggregates only, no per-visitor data |
 | Search | No query logging |
-| Passwords | argon2, 12-character minimum, forced change on first login |
+| Passwords | argon2, 12-character minimum, forced change on first login. **The forced change was broken until now**: the change-password page sat inside the admin route group whose layout redirects to it, so it redirected to itself — an infinite loop returning an empty page. Since every account is created with `mustChangePassword: true`, no new administrator could sign in at all. The page now sits outside that group with its own guard. |
 | Sessions | 12-hour idle expiry; HttpOnly, SameSite=Strict, Secure |
 | Rate limiting | Postgres-backed, 5 attempts / 15 min / IP on login and newsletter |
 | Audit log | Actor, action, object, IP and timestamp on every create/update/publish/delete. Actor, action, object and timestamp are kept indefinitely; **IP addresses are nulled after 90 days** (`AUDIT_IP_RETENTION_DAYS`). The administrators here are children, and holding a minor's IP and activity timestamps forever exceeds what the accountability purpose needs. |

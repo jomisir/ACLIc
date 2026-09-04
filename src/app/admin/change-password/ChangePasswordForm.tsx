@@ -3,14 +3,14 @@
 import { useActionState } from "react";
 import { changePasswordAction, type ChangePasswordState } from "@/actions/change-password";
 
-export default function ChangePasswordPage() {
+export function ChangePasswordForm() {
   const [state, formAction, pending] = useActionState<ChangePasswordState, FormData>(
     changePasswordAction,
     {},
   );
 
   return (
-    <div className="max-w-sm">
+    <div className="max-w-sm mx-auto py-16 px-6">
       <h1 className="text-2xl mb-2">Set a new password</h1>
       <p className="text-sm text-[#5a5e67] mb-6">
         This account must set a new password before continuing. Minimum 12 characters.

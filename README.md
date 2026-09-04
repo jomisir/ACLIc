@@ -9,18 +9,84 @@ Deployed to **cPanel shared hosting** (Yegara Premium) with the database on **Ne
 and builds produced by **GitHub Actions** — see `deploy.md` for the full runbook and
 `deploy/yegara-feasibility.md` for why it is set up this way.
 
-## Local setup
+## Running it locally
+
+The app talks to Postgres through Neon's **HTTP** driver — it does not open a
+socket to port 5432, it POSTs SQL over HTTPS. So a `DATABASE_URL` pointing at
+your own `localhost:5432` cannot work on its own: the driver tries HTTPS against
+localhost and fails with `ECONNREFUSED ... :443`. Pick one of the two paths
+below.
+
+### Path A — free Neon project (simplest)
+
+Nothing extra to run. Create a free project at neon.tech, copy the pooled
+connection string, and:
 
 ```bash
-cp .env.example .env.local   # fill in DATABASE_URL at minimum
+cp .env.example .env.local     # paste the Neon string into DATABASE_URL
 npm install
-npm run db:generate          # generates SQL from src/db/schema.ts (only needed after a schema change)
-npm run db:migrate           # applies migrations
-npm run db:seed              # creates the bootstrap superuser + empty content rows
+npm run db:migrate             # create the tables
+npm run db:seed                # bootstrap superuser + empty content rows
 npm run dev
 ```
 
-Open http://localhost:3000 — it redirects to `/en`. Admin panel: http://localhost:3000/admin/login.
+### Path B — local Postgres, no account, works offline
+
+Uses `scripts/neon-http-proxy.mjs`, which speaks the same SQL-over-HTTP protocol
+the Neon client expects and forwards to a plain local Postgres.
+
+```bash
+createdb aclic
+
+cp .env.example .env.local
+# DATABASE_URL=postgresql://postgres:postgres@localhost:5432/aclic
+# NEON_FETCH_ENDPOINT=http://127.0.0.1:5599/sql     <- uncomment this line
+
+npm install
+npm run db:migrate
+npm run db:seed
+
+npm run dev:db-proxy           # terminal 1 — leave running
+npm run dev                    # terminal 2
+```
+
+`NEON_FETCH_ENDPOINT` is what redirects the driver at the proxy. **Leave it
+unset in production**, where unset means the real Neon endpoint.
+
+### Then
+
+Open http://localhost:3000 — it redirects to `/en`. Admin panel at
+http://localhost:3000/admin/login, using `ADMIN_EMAIL` / `ADMIN_PASSWORD` from
+your `.env.local`. The first sign-in forces a password change, after which you
+are signed out and sign in again with the new one.
+
+### Sample content for a demo
+
+`db:seed` deliberately leaves the site empty — none of ACLIC's real wording is
+confirmed, so nothing is invented. That makes for a blank demo, so:
+
+```bash
+npm run db:demo
+```
+
+fills every page, all three languages, the thirteen departments, work items,
+resources and partners with throwaway text. Every string starts with `SAMPLE`
+and the leadership slots are "Sample Leader 1..17" — nothing here can be
+mistaken for approved wording, and no invented name, biography or photograph of
+a real child is created even as test data. It refuses to run against anything
+but a local database.
+
+To get back to a clean empty site: drop the database, `db:migrate`, `db:seed`.
+
+### Uploads without Supabase
+
+Photos, logos and report files normally go to a private Supabase bucket. If
+`SUPABASE_URL` is empty, development mode writes them to `.local-storage/`
+instead (gitignored), so the media library, image slots and gated file serving
+all work with nothing extra installed. This fallback is **development only** —
+in production, missing Supabase credentials still throw, because a
+misconfigured deployment must fail loudly rather than quietly write files onto
+a shared host's disk.
 
 ## Environment variables
 
@@ -28,7 +94,8 @@ See `.env.example` for the full list. The important ones:
 
 | Variable | Purpose |
 | --- | --- |
-| `DATABASE_URL` | Neon Postgres connection string (see `deploy.md` step 2) |
+| `DATABASE_URL` | Neon Postgres connection string (see `deploy.md` step 2), or a local one when using the proxy |
+| `NEON_FETCH_ENDPOINT` | **Development only.** Points the Neon driver at the local proxy. Unset in production. |
 | `AUTH_SECRET` | Session signing secret — generate with `openssl rand -base64 32` |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL, used in metadata, sitemap, and email links |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Used once by `db:seed` to create the first superuser |
